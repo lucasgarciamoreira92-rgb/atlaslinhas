@@ -29,3 +29,10 @@
 @keyframes atlas-submenu-open{from{height:0}to{height:var(--radix-collapsible-content-height)}}
 @keyframes atlas-submenu-close{from{height:var(--radix-collapsible-content-height)}to{height:0}}
 @media(prefers-reduced-motion:reduce){.nav-settings-content[data-state]{animation:none}.nav-settings-toggle .nav-settings-chevron{transition:none}}
+
+/* Pending registration alert: subtle terracotta glow and hover emphasis. */
+.agent-card{position:relative;isolation:isolate;border-color:#8c6650;box-shadow:0 0 16px #c17b5130,0 0 32px #c17b5119;transition:transform .2s ease,box-shadow .2s ease;transform-origin:center}
+.agent-card:before{content:'';position:absolute;inset:-5px;z-index:-1;border-radius:25px;box-shadow:0 0 20px 3px #bf79552b;pointer-events:none}
+.agent-card>div>svg{color:#d09571}
+.agent-card:hover,.agent-card:focus-within{transform:scale(1.025);box-shadow:0 0 21px #c17b5145,0 0 40px #c17b5125}
+@media(prefers-reduced-motion:reduce){.agent-card{transition:none}.agent-card:hover,.agent-card:focus-within{transform:none}}
