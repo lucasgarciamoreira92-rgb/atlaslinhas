@@ -26,7 +26,7 @@ O caminho acima pressupõe que o repositório foi clonado na sua pasta pessoal. 
 
 ## Primeiro acesso e validação
 
-- Após criar seu acesso, o inventário vazio abre uma demonstração identificada como tal. Clique em **Usar com meus dados** para cadastrar suas linhas reais.
+- Após criar seu acesso, a aplicação abre diretamente seus cadastros. Antes da primeira linha, o inventário fica vazio, sem demonstração ou troca de modo.
 - Em **Configurações → Equipe e acessos**, o administrador cria operadores com senha própria, redefine a senha deles, bloqueia e reativa contas. O operador pode mudar sua senha em **Minha senha**.
 - Operadores cadastram/editam linhas e aparelhos, consultam histórico e exportam CSV. Somente o administrador gerencia equipe, cria backups e recupera arquivos.
 - **Sair** encerra a sessão desta aplicação. A sessão dura até 8 horas e é revogada ao bloquear a conta ou redefinir a senha.

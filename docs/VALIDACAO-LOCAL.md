@@ -2,16 +2,16 @@
 
 Status inicial: adaptação local implementada e testada em ambiente de desenvolvimento Linux com Node 24. A instalação e o uso no Mac do usuário serão conferidos neste roteiro. Não marcar um bloco operacional como aprovado apenas pelo teste automatizado.
 
-## Bloco 1 — instalação, acesso e separação dos exemplos
+## Bloco 1 — instalação, acesso e inventário real
 
 1. Seguir a instalação do README e abrir http://localhost:4310.
 2. Confirmar que aparece a criação do administrador, sem login no ChatGPT. Criar nome, e-mail e senha própria.
-3. Conferir nome e perfil Administrador no menu. Se o inventário está vazio, a demonstração deve estar identificada.
-4. Clicar em Usar com meus dados. Antes do primeiro cadastro real, essa área deve estar vazia.
+3. Conferir nome e perfil Administrador no menu. O inventário deve abrir diretamente nos cadastros reais.
+4. Antes do primeiro cadastro real, conferir o inventário vazio e o botão Cadastrar linha, sem opções de demonstração.
 5. Abrir Visão geral, Minhas linhas, Chips em reserva e Configurações.
 6. Recarregar a página, sair e entrar novamente. Fechar o servidor com Control+C e iniciar novamente; o administrador não deve precisar ser recriado.
 
-Aceite: acesso independente, perfil correto, telas funcionando e exemplos separados. O inventário vazio pode reabrir na demonstração; isso não significa perda de dados reais.
+Aceite: acesso independente, perfil correto e telas funcionando. Recarregar ou entrar novamente mantém o inventário real, mesmo vazio; cadastros existentes são preservados.
 
 ## Demais blocos
 
