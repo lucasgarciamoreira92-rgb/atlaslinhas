@@ -1,6 +1,6 @@
 # Validações operacionais — versão Mac
 
-Status inicial: adaptação local implementada e testada em ambiente de desenvolvimento Linux com Node 24. A instalação e o uso no Mac do usuário serão conferidos neste roteiro. Não marcar um bloco operacional como aprovado apenas pelo teste automatizado.
+Status em 11/09/2026: blocos 1 a 5 aprovados pelo usuário. Validações pausadas após o bloco 5. **Retomar pelo bloco 6 com a automação de interface**, conforme [AUTOMACAO.md](AUTOMACAO.md). Os procedimentos abaixo preservam o roteiro original como referência. Uma execução em CI ou Linux não substitui a comprovação da execução no Mac do usuário.
 
 ## Bloco 1 — instalação, acesso e inventário real
 

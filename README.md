@@ -30,7 +30,7 @@ O caminho acima pressupõe que o repositório foi clonado na sua pasta pessoal. 
 - Em **Configurações → Equipe e acessos**, o administrador cria operadores com senha própria, redefine a senha deles, bloqueia e reativa contas. O operador pode mudar sua senha em **Minha senha**.
 - Operadores cadastram/editam linhas e aparelhos, consultam histórico e exportam CSV. Somente o administrador gerencia equipe, cria backups e recupera arquivos.
 - **Sair** encerra a sessão desta aplicação. A sessão dura até 8 horas e é revogada ao bloquear a conta ou redefinir a senha.
-- Continue pelo [roteiro de validação](docs/VALIDACAO-LOCAL.md), começando pelo bloco 1.
+- Continue pelo [roteiro de validação](docs/VALIDACAO-LOCAL.md), **retomando pelo bloco 6**: os blocos 1 a 5 já foram aprovados pelo usuário.
 
 ## Onde ficam os dados
 
@@ -78,3 +78,16 @@ O servidor local escuta somente em `127.0.0.1`. O teste de um operador pode ser 
 A implementação anterior hospedada foi preservada em `app/`, `lib/` e na configuração de Sites como referência. Os scripts `sites:*` pertencem à versão anterior; **para usar no Mac, siga os comandos locais acima**. [ATLAS.md](ATLAS.md) registra o histórico das etapas; [LEGADO-SITES.md](docs/LEGADO-SITES.md) descreve a infraestrutura anterior.
 
 O workflow `local-mac.yml` também executa a instalação, a compilação e os testes em um runner macOS do GitHub Actions a cada atualização da branch main. O resultado está na aba Actions do repositório.
+
+## Testes automáticos pela interface e Codex CLI
+
+A automação usa Playwright com dados fictícios e um banco temporário por teste. Consulte [AUTOMACAO.md](docs/AUTOMACAO.md) para instalar o Codex no Mac e retomar pelo bloco 6.
+
+```bash
+bash scripts/preparar-automacao-mac.sh
+# Depois da instalação, em um novo Terminal:
+codex login
+codex
+```
+
+Também é possível executar diretamente `npm run test:bloco6 -- --headed`. Abra as evidências com `npm run test:relatorio`.

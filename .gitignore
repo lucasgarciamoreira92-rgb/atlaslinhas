@@ -55,3 +55,8 @@ next-env.d.ts
 *.sqlite-wal
 *.db
 backup.key
+
+# Evidence generated exclusively from isolated UI test runs.
+/playwright-report/
+/test-results/
+/blob-report/

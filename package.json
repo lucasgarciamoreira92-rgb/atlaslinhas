@@ -18,7 +18,12 @@
     "local:reset-password": "node scripts/reset-local-password.mjs",
     "sites:build": "node scripts/run-framework.mjs build",
     "sites:start": "node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js dev --config dist/server/wrangler.json --local --persist-to .wrangler/state --ip 127.0.0.1 --inspector-port 0",
-    "sites:dev": "node scripts/run-framework.mjs dev"
+    "sites:dev": "node scripts/run-framework.mjs dev",
+    "test:interface": "node scripts/test-interface.mjs",
+    "test:bloco6": "node scripts/test-interface.mjs 6",
+    "test:bloco7": "node scripts/test-interface.mjs 7",
+    "test:regressao": "node scripts/test-interface.mjs regressao",
+    "test:relatorio": "playwright show-report --host 127.0.0.1"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
@@ -49,6 +54,7 @@
   "devDependencies": {
     "@cloudflare/vite-plugin": "1.37.1",
     "@cloudflare/workers-types": "4.20260515.1",
+    "@playwright/test": "1.62.1",
     "@tailwindcss/postcss": "4.2.1",
     "@types/node": "22.19.19",
     "@types/react": "19.2.14",

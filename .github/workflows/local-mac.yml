@@ -2,6 +2,7 @@ name: Validar Atlas Linhas no macOS
 on:
   push:
     branches: [main]
+  workflow_dispatch:
   pull_request:
     branches: [main]
 permissions:
@@ -24,3 +25,17 @@ jobs:
         run: node node_modules/typescript/bin/tsc --noEmit
       - name: Testar aplicação com banco e arquivos locais
         run: npm run local:test
+      - name: Instalar navegador de testes
+        run: node node_modules/@playwright/test/cli.js install chromium
+      - name: Testar interface com dados temporários
+        run: node node_modules/@playwright/test/cli.js test
+      - name: Guardar relatório e evidências
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: atlas-interface-macos
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
+          if-no-files-found: ignore
