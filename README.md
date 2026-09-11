@@ -79,7 +79,17 @@ A implementação anterior hospedada foi preservada em `app/`, `lib/` e na confi
 
 O workflow `local-mac.yml` também executa a instalação, a compilação e os testes em um runner macOS do GitHub Actions a cada atualização da branch main. O resultado está na aba Actions do repositório.
 
-## Testes automáticos pela interface e Codex CLI
+## Testes automáticos no Mac, acionados pelo GitHub
+
+Para receber solicitações de teste automaticamente, com navegador visível e retorno dos resultados ao GitHub, prepare o executor uma vez:
+
+```bash
+bash scripts/ativar-testes-automaticos-mac.sh
+```
+
+O instalador pede login no GitHub, cria o controle privado, registra o executor e solicita o primeiro bloco 6. Consulte [EXECUTOR-MAC.md](docs/EXECUTOR-MAC.md) para acompanhar, autorizar o acesso do ChatGPT ao novo repositório e gerenciar o serviço. Os testes usam uma cópia separada e dados fictícios.
+
+## Investigação manual com Codex CLI
 
 A automação usa Playwright com dados fictícios e um banco temporário por teste. Consulte [AUTOMACAO.md](docs/AUTOMACAO.md) para instalar o Codex no Mac e retomar pelo bloco 6.
 

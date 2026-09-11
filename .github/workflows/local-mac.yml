@@ -23,6 +23,10 @@ jobs:
         run: bash scripts/instalar-mac.sh
       - name: Conferir TypeScript
         run: node node_modules/typescript/bin/tsc --noEmit
+      - name: Conferir acionamento automático e instalador
+        run: node --test tests/automation/*.test.mjs
+      - name: Verificar binários do instalador sem registrar executor
+        run: bash scripts/ativar-testes-automaticos-mac.sh verificar-ferramentas
       - name: Testar aplicação com banco e arquivos locais
         run: npm run local:test
       - name: Instalar navegador de testes

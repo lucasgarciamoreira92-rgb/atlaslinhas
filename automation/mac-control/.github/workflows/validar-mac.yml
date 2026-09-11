@@ -1,0 +1,93 @@
+name: Validar no Mac do Lucas
+run-name: Validação solicitada no Mac · ${{ github.run_number }}
+on:
+  push:
+    branches: [main]
+    paths: [requests/atual.json]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: atlas-linhas-mac
+  cancel-in-progress: false
+jobs:
+  preparar:
+    if: github.repository == 'lucasgarciamoreira92-rgb/atlaslinhas-validacao-mac' && github.event.repository.private == true && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      id: ${{ steps.pedido.outputs.id }}
+      bloco: ${{ steps.pedido.outputs.bloco }}
+      sourceSha: ${{ steps.pedido.outputs.sourceSha }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Conferir pedido e código aprovado na main
+        id: pedido
+        run: node scripts/pedido.mjs
+  mac:
+    needs: preparar
+    runs-on: [self-hosted, macOS, atlas-linhas-mac]
+    timeout-minutes: 20
+    env:
+      CI: 'true'
+      ATLAS_REQUEST_ID: ${{ needs.preparar.outputs.id }}
+      ATLAS_TEST_BLOCK: ${{ needs.preparar.outputs.bloco }}
+      ATLAS_SOURCE_SHA: ${{ needs.preparar.outputs.sourceSha }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        id: control
+        with:
+          path: control
+          persist-credentials: false
+      - name: Obter a versão solicitada em uma cópia de testes
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          repository: lucasgarciamoreira92-rgb/atlaslinhas
+          ref: ${{ needs.preparar.outputs.sourceSha }}
+          path: application
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Limpar relatórios da cópia de testes
+        working-directory: application
+        run: node -e "const fs=require('node:fs'); for(const p of ['test-results','playwright-report']) fs.rmSync(p,{recursive:true,force:true})"
+      - name: Instalar e compilar a cópia de testes
+        working-directory: application
+        run: bash scripts/instalar-mac.sh
+      - name: Preparar navegador
+        working-directory: application
+        run: node node_modules/@playwright/test/cli.js install chromium
+      - name: Executar os testes com navegador visível
+        id: testes
+        run: node control/scripts/executar.mjs
+      - name: Produzir resumo da validação
+        if: always() && steps.control.outcome == 'success'
+        env:
+          ATLAS_TEST_OUTCOME: ${{ steps.testes.outcome }}
+        run: node control/scripts/relatorio.mjs
+      - name: Guardar resumo
+        if: always() && steps.control.outcome == 'success'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: atlas-resumo-${{ needs.preparar.outputs.id }}-${{ github.run_attempt }}
+          path: control/out/
+          retention-days: 14
+          if-no-files-found: warn
+      - name: Guardar evidências do navegador
+        if: always() && (steps.testes.outcome == 'success' || steps.testes.outcome == 'failure')
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: atlas-interface-${{ needs.preparar.outputs.id }}-${{ github.run_attempt }}
+          path: |
+            application/playwright-report/
+            application/test-results/
+          retention-days: 14
+          if-no-files-found: warn

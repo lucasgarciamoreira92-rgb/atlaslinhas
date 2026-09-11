@@ -8,6 +8,8 @@ O Codex CLI recebe os pedidos e executa os comandos no Mac. O Playwright opera u
 
 ## Preparar o Mac uma vez
 
+**Fluxo recomendado agora:** usar o [executor automático no Mac](EXECUTOR-MAC.md). Ele recebe pedidos pelo GitHub e executa sem abrir Codex ou colar instruções a cada rodada. A instalação e o primeiro acionamento estão descritos nesse documento. O fluxo com Codex abaixo continua disponível para investigação manual.
+
 Na cópia existente:
 
 ```bash

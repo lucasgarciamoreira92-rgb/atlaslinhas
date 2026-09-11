@@ -8,6 +8,8 @@
 - Bloco 6: acessos/operador. Bloco 7: CSV/backups/recuperação. Bloco 8: aceite final.
 - O resultado automatizado deve identificar ambiente, commit, testes executados, falhas e limitações. Não marcar validação no Mac do usuário como feita por uma execução em CI/Linux.
 - A conversa do ChatGPT não é compartilhada automaticamente com a sessão CLI. Leia este arquivo e docs/AUTOMACAO.md ao iniciar.
+- Nova direção aprovada: acionar testes no Mac pelo repositório privado `lucasgarciamoreira92-rgb/atlaslinhas-validacao-mac`. Leia docs/EXECUTOR-MAC.md. A instalação inicial deve ser feita no Mac; não afirmar conexão ou aprovação local antes de confirmar o executor e o resultado real.
+- O instalador publica o controle privado e solicita o bloco 6 uma única vez. Depois, pedidos são commits em `requests/atual.json` do controle privado. O usuário não deve precisar abrir Codex nem copiar instruções a cada validação.
 
 ## Execução e testes
 
