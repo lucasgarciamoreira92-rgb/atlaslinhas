@@ -87,10 +87,11 @@ try{
  let packageHistory=(await req('/api/history?id='+packageLine.id,{cookie:admin})).data.history;
  assert.ok(packageHistory[0].changes.some(c=>c.field==='Pacote de dados ativo'&&c.after==='20 GB'));
  await req('/api/lines',{cookie:admin,body:{...packageLine,dataPackage:'x'.repeat(101)},status:400});
+ assert.equal((await req('/api/lines',{cookie:admin,body:{...packageLine,dataPackage:'20'}})).data.line.version,packageLine.version);
  const packageBackupId=(await req('/api/backups',{cookie:admin,body:{}})).data.id;
  const packageBackup=(await req('/api/backups?id='+packageBackupId,{cookie:admin})).data;
  assert.equal(packageBackup.payload.lines.find(l=>l.id===packageLine.id).dataPackage,'20 GB');
- packageLine=(await req('/api/lines',{cookie:admin,body:{...packageLine,dataPackage:'50 GB'}})).data.line;
+ packageLine=(await req('/api/lines',{cookie:admin,body:{...packageLine,dataPackage:'50'}})).data.line;
  packageHistory=(await req('/api/history?id='+packageLine.id,{cookie:admin})).data.history;
  assert.ok(packageHistory[0].changes.some(c=>c.field==='Pacote de dados ativo'&&c.before==='20 GB'&&c.after==='50 GB'));
  assert.equal(packageHistory[0].actor.email,account.email);assert.ok(Number.isFinite(Date.parse(packageHistory[0].date)));
@@ -101,6 +102,8 @@ try{
  await req('/api/restore',{cookie:admin,body:{mode:'restore',file:packageBackup,token:packagePreview.token}});
  packageLine=(await req('/api/lines',{cookie:admin})).data.lines.find(l=>l.id===packageLine.id);assert.equal(packageLine.dataPackage,'20 GB');
  packageLine=(await req('/api/lines',{cookie:admin,body:{...packageLine,dataPackage:'Ilimitado'}})).data.line;
+ const decimalLine=(await req('/api/lines',{cookie:admin,body:{...packageLine,dataPackage:'2.5'}})).data.line;assert.equal(decimalLine.dataPackage,'2,5 GB');
+ packageLine=(await req('/api/lines',{cookie:admin,body:{...decimalLine,dataPackage:'Ilimitado'}})).data.line;
  const packageCsv=(await req('/api/export',{cookie:admin})).text;
  assert.ok(packageCsv.split('\r\n')[0].endsWith('"Pacote de dados ativo"'));assert.ok(packageCsv.split('\r\n').some(row=>row.endsWith('"Ilimitado"')));
  await stop();await start();

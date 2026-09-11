@@ -1,4 +1,4 @@
-import {lineSchema,configSchema,slotOptions,type Device,type Config,type Line} from './atlas';
+import {lineSchema,configSchema,slotOptions,formatDataPackage,type Device,type Config,type Line} from './atlas';
 
 // Older devices keep their previously available bindings until reviewed.
 export const deviceSlots=(device:Device)=>device.slots??[...slotOptions];
@@ -41,7 +41,7 @@ export function prepareConfig(input:Config,lines:Line[]):Config {
   return config;
 }
 export function sameLine(a:Line,b:Line){
-  const {id:ai,version:av,updatedAt:at,...left}={...a,dataPackage:a.dataPackage??''};
-  const {id:bi,version:bv,updatedAt:bt,...right}={...b,dataPackage:b.dataPackage??''};
+  const {id:ai,version:av,updatedAt:at,...left}={...a,dataPackage:formatDataPackage(a.dataPackage)};
+  const {id:bi,version:bv,updatedAt:bt,...right}={...b,dataPackage:formatDataPackage(b.dataPackage)};
   return Object.keys(left).every(key=>left[key as keyof typeof left]===right[key as keyof typeof right])&&Object.keys(left).length===Object.keys(right).length;
 }
