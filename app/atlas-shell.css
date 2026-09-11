@@ -36,3 +36,7 @@
 .agent-card>div>svg{color:#d09571}
 .agent-card:hover,.agent-card:focus-within{transform:scale(1.025);box-shadow:0 0 21px #c17b5145,0 0 40px #c17b5125}
 @media(prefers-reduced-motion:reduce){.agent-card{transition:none}.agent-card:hover,.agent-card:focus-within{transform:none}}
+
+/* Accommodate the approved sidebar subtitle without changing other labels. */
+.brand-header .wordmark{min-width:0}
+.brand-header .wordmark small{letter-spacing:0;line-height:1.5}
