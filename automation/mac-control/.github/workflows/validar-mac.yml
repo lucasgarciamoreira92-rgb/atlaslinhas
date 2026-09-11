@@ -34,6 +34,10 @@ jobs:
     needs: preparar
     runs-on: [self-hosted, macOS, atlas-linhas-mac]
     timeout-minutes: 20
+    defaults:
+      run:
+        # Runner lives in Application Support; quote the generated script path.
+        shell: bash --noprofile --norc -eo pipefail "{0}"
     env:
       CI: 'true'
       ATLAS_REQUEST_ID: ${{ needs.preparar.outputs.id }}
