@@ -14,3 +14,18 @@
 .topbar{min-height:56px;padding:20px 30px 0;display:flex;align-items:center;justify-content:space-between;gap:15px;background:transparent;border:0}.breadcrumb{display:flex;align-items:center;gap:10px;font-size:.8125rem;color:#858a7e}.breadcrumb>svg{width:13px;height:13px}.breadcrumb strong{font-weight:750;color:#626e54}.sidebar-toggle{color:#78886b;border-radius:50%;background:#f1f3ed}.topbar-right{display:flex;align-items:center;gap:12px}.top-avatar{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;font-size:.75rem;font-weight:800;background:#e7eddf;color:#5a6c47}
 [data-slot=sidebar][data-mobile=true]{background:linear-gradient(155deg,#2b2e28,#171818);border:1px solid #515549;border-radius:0 28px 28px 0;padding:10px!important}.atlas-sidebar [data-slot=sidebar-content]{scrollbar-width:thin;scrollbar-color:#4f5a41 transparent}
 @media(max-width:767px){.app-inset{margin:9px 7px;min-height:calc(100dvh - 18px);border-radius:24px}.topbar{padding:16px 17px 0;min-height:45px}.breadcrumb>span{display:none}.top-avatar{display:none}}
+
+/* Nested navigation: keep existing destinations and page layouts. */
+.nav-settings-toggle .nav-settings-chevron{margin-left:auto;width:16px!important;height:16px!important;transition:transform .22s ease}
+.nav-settings-toggle[data-state=open] .nav-settings-chevron{transform:rotate(180deg)}
+.nav-settings-content{overflow:hidden}
+.nav-settings-content[data-state=open]{animation:atlas-submenu-open .22s ease-out}
+.nav-settings-content[data-state=closed]{animation:atlas-submenu-close .2s ease-in}
+.nav-settings-submenu{margin:8px 0 0 17px;padding:2px 0 2px 8px;border-color:#505b43;gap:5px}
+.nav-settings-submenu .nav-button{min-height:44px;padding:10px 9px;gap:8px;border-radius:12px;font-size:.875rem;line-height:1.35}
+.nav-settings-submenu .nav-button svg{width:18px!important;height:18px!important}
+.nav-settings-submenu .nav-submenu-label{min-width:0;white-space:normal;overflow:visible;text-overflow:clip}
+.nav-settings-submenu .nav-count{flex-shrink:0;min-width:23px;height:23px}
+@keyframes atlas-submenu-open{from{height:0}to{height:var(--radix-collapsible-content-height)}}
+@keyframes atlas-submenu-close{from{height:var(--radix-collapsible-content-height)}to{height:0}}
+@media(prefers-reduced-motion:reduce){.nav-settings-content[data-state]{animation:none}.nav-settings-toggle .nav-settings-chevron{transition:none}}
