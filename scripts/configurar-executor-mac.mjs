@@ -5,7 +5,7 @@ import {join, dirname, delimiter} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {setTimeout as delay} from 'node:timers/promises';
 import {CONTROL, LABEL} from '../automation/mac-control/scripts/pedido.mjs';
-import {TEMPLATE_FILES, prepareControl, requestFirstTest, downloadVerified, assertPrivateRepository} from './automacao-mac-core.mjs';
+import {TEMPLATE_FILES, prepareControl, requestFirstTest, downloadVerified, assertPrivateRepository, readRunnerSettings} from './automacao-mac-core.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const base = join(homedir(), 'Library', 'Application Support', 'AtlasLinhasAutomacao');
@@ -81,7 +81,7 @@ async function unpackRunner(arch) {
 }
 async function installRunner(arch) {
   if (await exists(join(runner, '.runner'))) {
-    const config = JSON.parse(await readFile(join(runner, '.runner'), 'utf8'));
+    const config = await readRunnerSettings(join(runner, '.runner'));
     if (config.gitHubUrl?.replace(/\/$/, '') !== url) throw Error('Esta pasta já pertence a outro executor. Nada foi alterado.');
     return config;
   }
@@ -94,7 +94,7 @@ async function installRunner(arch) {
     run('/bin/bash', ['./config.sh', '--unattended', '--url', url, '--name', 'atlas-linhas-mac-lucas', '--labels', LABEL, '--work', '_work'],
       'Registro do executor', {cwd: runner, env});
   } finally { delete env.ACTIONS_RUNNER_INPUT_TOKEN; registration.token = ''; }
-  return JSON.parse(await readFile(join(runner, '.runner'), 'utf8'));
+  return readRunnerSettings(join(runner, '.runner'));
 }
 async function startService() {
   if (!await exists(join(runner, '.service'))) run('/bin/bash', ['./svc.sh', 'install'], 'Instalação do serviço', {cwd: runner});
@@ -122,7 +122,7 @@ async function main() {
   try {
     if (!['instalar', 'verificar-ferramentas'].includes(action)) {
       if (!await exists(join(runner, '.runner'))) throw Error('Executor ainda não configurado.');
-      const config = JSON.parse(await readFile(join(runner, '.runner'), 'utf8'));
+      const config = await readRunnerSettings(join(runner, '.runner'));
       if (config.gitHubUrl?.replace(/\/$/, '') !== url) throw Error('A pasta pertence a outro executor.');
       const operation = {status: 'status', parar: 'stop', iniciar: 'start', desinstalar: 'stop'}[action];
       run('/bin/bash', ['./svc.sh', operation], 'Gerenciamento do serviço', {cwd: runner});

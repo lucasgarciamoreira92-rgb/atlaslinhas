@@ -1,13 +1,32 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {mkdtemp, readFile, rm, access} from 'node:fs/promises';
+import {mkdtemp, readFile, writeFile, rm, access} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {createHash} from 'node:crypto';
 import {CONTROL, SOURCE, validateRequest, assertControlEvent, assertSourceOnMain} from '../../automation/mac-control/scripts/pedido.mjs';
 import {testArgs, assertWorkingCopy} from '../../automation/mac-control/scripts/executar.mjs';
 import {summarize, markdown} from '../../automation/mac-control/scripts/relatorio.mjs';
-import {prepareControl, requestFirstTest, downloadVerified, DESCRIPTION, MARKER, TEMPLATE_FILES} from '../../scripts/automacao-mac-core.mjs';
+import {prepareControl, requestFirstTest, downloadVerified, readRunnerSettings, DESCRIPTION, MARKER, TEMPLATE_FILES} from '../../scripts/automacao-mac-core.mjs';
+
+test('retoma o registro com BOM UTF-8 sem modificar o arquivo e rejeita configuração inválida', async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'atlas-runner-settings-'));
+  const file = join(directory, '.runner');
+  const config = {agentId: 42, gitHubUrl: 'https://github.com/lucasgarciamoreira92-rgb/atlaslinhas-validacao-mac'};
+  try {
+    for (const prefix of ['', '\uFEFF']) {
+      const original = prefix + JSON.stringify(config, null, 2);
+      await writeFile(file, original, 'utf8');
+      if (prefix) assert.throws(() => JSON.parse(original));
+      assert.deepEqual(await readRunnerSettings(file), config);
+      assert.equal(await readFile(file, 'utf8'), original);
+    }
+    for (const invalid of ['\uFEFF{broken', '{}', '{"agentId":0,"gitHubUrl":"https://github.com/test"}']) {
+      await writeFile(file, invalid, 'utf8');
+      await assert.rejects(readRunnerSettings(file));
+    }
+  } finally { await rm(directory, {recursive: true, force: true}); }
+});
 
 const sha = 'a'.repeat(40);
 const pedido = {id: 'bloco6-teste-1', bloco: '6', sourceSha: sha, createdAt: '2026-09-11T21:00:00.000Z'};

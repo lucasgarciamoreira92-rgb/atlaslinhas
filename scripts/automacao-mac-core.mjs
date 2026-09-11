@@ -1,6 +1,6 @@
 import {createHash} from 'node:crypto';
 import {createReadStream, createWriteStream} from 'node:fs';
-import {mkdir, rename, rm, stat} from 'node:fs/promises';
+import {mkdir, rename, rm, stat, readFile} from 'node:fs/promises';
 import {dirname} from 'node:path';
 import {Readable, Transform} from 'node:stream';
 import {pipeline} from 'node:stream/promises';
@@ -12,6 +12,16 @@ export const TEMPLATE_FILES = [
   '.github/workflows/validar-mac.yml', 'AGENTS.md', 'README.md', 'atlas-control.json',
   'scripts/pedido.mjs', 'scripts/executar.mjs', 'scripts/relatorio.mjs',
 ];
+
+export async function readRunnerSettings(path) {
+  // The .NET runner can write an initial UTF-8 BOM, which JSON.parse rejects.
+  const text = await readFile(path, 'utf8');
+  const config = JSON.parse(text.replace(/^\uFEFF/, ''));
+  if (!Number.isSafeInteger(config?.agentId) || config.agentId <= 0 || typeof config.gitHubUrl !== 'string') {
+    throw Error('Configuração do executor incompleta. O registro existente foi preservado.');
+  }
+  return config;
+}
 
 export function assertPrivateRepository(repo) {
   if (repo?.full_name !== CONTROL || repo.private !== true || repo.owner?.login !== CONTROL.split('/')[0]) {
