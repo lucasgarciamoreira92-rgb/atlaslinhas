@@ -14,9 +14,9 @@ const rl=createInterface({input:process.stdin,output,terminal:true});let db;
 try{
  console.log('Pare a aplicação antes de redefinir uma senha. Os dados e o histórico serão preservados.');
  const email=(await rl.question('E-mail cadastrado: ')).trim().toLowerCase();
- process.stdout.write('Nova senha (mínimo 12 caracteres, entrada oculta): ');hidden=true;const password=await rl.question('');hidden=false;process.stdout.write('\n');
+ process.stdout.write('Nova senha (mínimo 8 caracteres, entrada oculta): ');hidden=true;const password=await rl.question('');hidden=false;process.stdout.write('\n');
  process.stdout.write('Repita a senha: ');hidden=true;const confirm=await rl.question('');hidden=false;process.stdout.write('\n');
- if(password.length<12||password.length>128||password!==confirm)throw Error('Senhas diferentes ou tamanho inválido.');
+ if(password.length<8||password.length>128||password!==confirm)throw Error('Senhas diferentes ou tamanho inválido.');
  const directory=resolve(process.env.ATLAS_DATA_DIR||join(homedir(),'AtlasLinhas','dados'));
  if(!existsSync(join(directory,'atlas-linhas.sqlite')))throw Error('Banco local não encontrado. Confira ATLAS_DATA_DIR.');
  db=new DatabaseSync(join(directory,'atlas-linhas.sqlite'),{open:true});db.exec('PRAGMA foreign_keys=ON;PRAGMA busy_timeout=5000;');

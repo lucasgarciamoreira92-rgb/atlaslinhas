@@ -13,7 +13,7 @@ bash scripts/instalar-mac.sh
 bash scripts/iniciar-mac.sh
 ```
 
-Abra **http://localhost:4310** no navegador. Na primeira abertura, crie seu nome, e-mail e senha de administrador (mínimo 12 caracteres). Não existe senha padrão. O e-mail identifica sua conta local; não exige conta do ChatGPT e não envia mensagens.
+Abra **http://localhost:4310** no navegador. Na primeira abertura, crie seu nome, e-mail e senha de administrador (mínimo 8 caracteres, podendo usar somente números). Não existe senha padrão. O e-mail identifica sua conta local; não exige conta do ChatGPT e não envia mensagens.
 
 Para iniciar nos próximos dias:
 

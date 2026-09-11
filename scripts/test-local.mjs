@@ -10,7 +10,7 @@ let child,logs='';
 async function start(){logs='';child=spawn(process.execPath,['local-dist/server.mjs'],{cwd:resolve('.'),env:{...process.env,ATLAS_DATA_DIR:directory,ATLAS_PORT:String(port)},stdio:['ignore','pipe','pipe']});child.stdout.on('data',v=>logs+=v);child.stderr.on('data',v=>logs+=v);await new Promise((yes,no)=>{const timeout=setTimeout(()=>no(Error('Servidor não iniciou: '+logs)),10000);const onExit=()=>{clearTimeout(timeout);no(Error('Servidor encerrou: '+logs))};child.once('exit',onExit);child.stdout.on('data',()=>{if(logs.includes('Atlas Linhas disponível')){clearTimeout(timeout);child.off('exit',onExit);yes()}})});}
 async function stop(){if(child&&child.exitCode===null){const end=once(child,'exit');child.kill('SIGTERM');await end;}}
 async function req(path,{body,cookie,origin=base,status=200,headers={}}={}){const r=await fetch(base+path,{method:body===undefined?'GET':'POST',headers:{...(body===undefined?{}:{'Content-Type':'application/json',Origin:origin}),...(cookie?{Cookie:cookie}:{}),...headers},...(body===undefined?{}:{body:JSON.stringify(body)})});const text=await r.text();assert.equal(r.status,status,`${path}: ${text}`);let data;try{data=JSON.parse(text)}catch{}return {data,text,headers:r.headers,cookie:r.headers.get('set-cookie')?.split(';')[0]};}
-const account={name:'Admin de teste',email:'admin@example.invalid',password:'Senha-teste-inicial-42!'};
+const account={name:'Admin de teste',email:'admin@example.invalid',password:'01234567'};
 let admin,operator;
 try{
  await start();
@@ -34,8 +34,8 @@ try{
  let history=(await req('/api/history?id='+line.id,{cookie:admin})).data.history;assert.equal(history.length,2);assert.ok(history[0].changes.some(c=>c.field==='Identificação'));assert.equal(history[0].actor.email,account.email);
  config=(await req('/api/settings',{cookie:admin,body:{...config,devices:config.devices.map(d=>({...d,location:'Sala 2'}))}})).data.config;
  history=(await req('/api/history?id='+line.id,{cookie:admin})).data.history;assert.equal(history[0].kind,'device');
- await req('/api/team',{cookie:admin,body:{name:'Operador',email:'operator@example.invalid',password:'Senha-operador-42!',active:true,version:0}});
- operator=(await req('/api/auth/login',{body:{email:'operator@example.invalid',password:'Senha-operador-42!'}})).cookie;
+ await req('/api/team',{cookie:admin,body:{name:'Operador',email:'operator@example.invalid',password:'00112233',active:true,version:0}});
+ operator=(await req('/api/auth/login',{body:{email:'operator@example.invalid',password:'00112233'}})).cookie;
  await req('/api/lines',{cookie:operator});await req('/api/team',{cookie:operator,status:403});await req('/api/backups',{cookie:operator,body:{},status:403});
  line=(await req('/api/lines',{cookie:operator,body:{...line,owner:'Operador'}})).data.line;assert.equal((await req('/api/history?id='+line.id,{cookie:admin})).data.history[0].actor.email,'operator@example.invalid');
  const exported=await req('/api/export',{cookie:operator});assert.match(exported.text,/Identificação revisada/);assert.match(exported.headers.get('content-type'),/csv/);
@@ -58,12 +58,12 @@ try{
  // Disk persistence: restart process, reuse a valid session, preserve key and validate old backup.
  await stop();await start();assert.equal((await req('/api/auth/status')).data.setupRequired,false);assert.equal((await req('/api/lines',{cookie:admin})).data.lines.length,1);assert.equal(await readFile(join(directory,'backup.key'),'utf8'),keyBefore);await req('/api/restore',{cookie:admin,body:{mode:'preview',file}});
  let member=(await req('/api/team',{cookie:admin})).data.members.find(m=>!m.is_owner);
- await req('/api/team',{cookie:admin,body:{...member,active:false}});await req('/api/lines',{cookie:operator,status:401});await req('/api/auth/login',{body:{email:member.email,password:'Senha-operador-42!'},status:401});
- member=(await req('/api/team',{cookie:admin})).data.members.find(m=>!m.is_owner);await req('/api/team',{cookie:admin,body:{...member,active:true,password:'Senha-nova-operador-42!'}});
- await req('/api/auth/login',{body:{email:member.email,password:'Senha-operador-42!'},status:401});operator=(await req('/api/auth/login',{body:{email:member.email,password:'Senha-nova-operador-42!'}})).cookie;
+ await req('/api/team',{cookie:admin,body:{...member,active:false}});await req('/api/lines',{cookie:operator,status:401});await req('/api/auth/login',{body:{email:member.email,password:'00112233'},status:401});
+ member=(await req('/api/team',{cookie:admin})).data.members.find(m=>!m.is_owner);await req('/api/team',{cookie:admin,body:{...member,active:true,password:'11223344'}});
+ await req('/api/auth/login',{body:{email:member.email,password:'00112233'},status:401});operator=(await req('/api/auth/login',{body:{email:member.email,password:'11223344'}})).cookie;
  const owner=(await req('/api/team',{cookie:admin})).data.members.find(m=>m.is_owner);await req('/api/team',{cookie:admin,body:{...owner,active:false},status:409});
- await req('/api/auth/password',{cookie:operator,body:{currentPassword:'errada',password:'Outra-senha-operador-42!'},status:400});
- operator=(await req('/api/auth/password',{cookie:operator,body:{currentPassword:'Senha-nova-operador-42!',password:'Outra-senha-operador-42!'}})).cookie;await req('/api/me',{cookie:operator});
+ await req('/api/auth/password',{cookie:operator,body:{currentPassword:'errada',password:'22334455'},status:400});
+ operator=(await req('/api/auth/password',{cookie:operator,body:{currentPassword:'11223344',password:'22334455'}})).cookie;await req('/api/me',{cookie:operator});
  await req('/api/auth/logout',{cookie:admin,body:{}});await req('/api/me',{cookie:admin,status:401});
  for(let i=0;i<10;i++)await req('/api/auth/login',{body:{email:'missing@example.invalid',password:'senha-errada'},status:401});await req('/api/auth/login',{body:{email:'missing@example.invalid',password:'senha-errada'},status:429});
  await stop();

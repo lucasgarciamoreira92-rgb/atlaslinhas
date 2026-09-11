@@ -6,7 +6,7 @@ import {identityContext,type LocalIdentity} from './identity';
 import {requireActor,AccessError} from '@/lib/access';
 const derive=promisify(scrypt),cookieName='atlas_session',ttl=8*60*60*1000;
 const digest=(s:string)=>createHash('sha256').update(s).digest('hex');
-const passwordSchema=z.string().min(12,'Use uma senha com pelo menos 12 caracteres.').max(128,'A senha deve ter até 128 caracteres.');
+const passwordSchema=z.string().min(8,'Use uma senha com pelo menos 8 caracteres.').max(128,'A senha deve ter até 128 caracteres.');
 const emailSchema=z.string().trim().email().max(254).transform(v=>v.toLowerCase());
 export async function hashPassword(password:string){const salt=randomBytes(16).toString('hex');const hash=await derive(password,salt,64) as Buffer;return `scrypt:${salt}:${hash.toString('hex')}`}
 async function validPassword(password:string,hash:string){const [kind,salt,encoded]=hash.split(':');if(kind!=='scrypt'||!salt||!encoded)return false;const actual=await derive(password,salt,64) as Buffer,expected=Buffer.from(encoded,'hex');return expected.length===actual.length&&timingSafeEqual(expected,actual)}
