@@ -1,5 +1,9 @@
+import {execFileSync} from 'node:child_process';
+import {platform, release} from 'node:os';
 import {defineConfig, devices} from '@playwright/test';
+function commit() { try { return execFileSync('git', ['rev-parse', 'HEAD'], {encoding: 'utf8'}).trim(); } catch { return 'Não disponível'; } }
 export default defineConfig({
+  metadata: {commit: commit(), sistema: platform() + ' ' + release(), node: process.version, dados: 'Fictícios e temporários'},
   testDir: './tests/e2e',
   fullyParallel: false,
   workers: 1,

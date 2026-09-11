@@ -13,14 +13,11 @@ export const test = base.extend<{app: Awaited<ReturnType<typeof isolatedServer>>
   baseURL: async ({app}, use) => { await use(app.url); },
   operatorPage: async ({browser, baseURL}, use, info) => {
     const context = await browser.newContext({baseURL, locale: 'pt-BR', viewport: {width: 1440, height: 1000}});
-    await context.tracing.start({screenshots: true, snapshots: true});
+    // Playwright Test owns tracing for contexts created through its browser fixture.
     const page = await context.newPage();
     try { await use(page); }
     finally {
       if (info.status !== info.expectedStatus) {
-        const path = info.outputPath('operador-trace.zip');
-        await context.tracing.stop({path});
-        await info.attach('trajetória-operador', {path, contentType: 'application/zip'});
         await info.attach('tela-operador', {body: await page.screenshot({fullPage: true}), contentType: 'image/png'});
       }
       await context.close();
