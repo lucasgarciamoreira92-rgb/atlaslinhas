@@ -64,6 +64,18 @@ try{
  const owner=(await req('/api/team',{cookie:admin})).data.members.find(m=>m.is_owner);await req('/api/team',{cookie:admin,body:{...owner,active:false},status:409});
  await req('/api/auth/password',{cookie:operator,body:{currentPassword:'errada',password:'22334455'},status:400});
  operator=(await req('/api/auth/password',{cookie:operator,body:{currentPassword:'11223344',password:'22334455'}})).cookie;await req('/api/me',{cookie:operator});
+ // Multiple eSIM profiles coexist with legacy eSIM bindings.
+ config=(await req('/api/settings',{cookie:admin})).data.config;
+ config=(await req('/api/settings',{cookie:admin,body:{...config,devices:config.devices.map(d=>({...d,slots:['Slot 1','eSIM','eSIM 2','eSIM 3']}))}})).data.config;
+ for(const [i,slot] of ['eSIM','eSIM 2','eSIM 3'].entries()){
+  const created=(await req('/api/lines',{cookie:admin,body:{...input,number:'5591234578'+i,slot}})).data.line;
+  assert.equal(created.slot,slot);
+ }
+ await req('/api/lines',{cookie:admin,body:{...input,number:'55912345789',slot:'eSIM 2'},status:409});
+ await req('/api/settings',{cookie:admin,body:{...config,devices:config.devices.map(d=>({...d,slots:['Slot 1','eSIM','eSIM 3']}))},status:400});
+ const multiBackup=(await req('/api/backups',{cookie:admin,body:{}})).data.id;
+ const multiFile=(await req('/api/backups?id='+multiBackup,{cookie:admin})).data;
+ assert.ok(multiFile.payload.lines.some(l=>l.slot==='eSIM 2'));
  await req('/api/auth/logout',{cookie:admin,body:{}});await req('/api/me',{cookie:admin,status:401});
  for(let i=0;i<10;i++)await req('/api/auth/login',{body:{email:'missing@example.invalid',password:'senha-errada'},status:401});await req('/api/auth/login',{body:{email:'missing@example.invalid',password:'senha-errada'},status:429});
  await stop();
