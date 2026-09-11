@@ -1,0 +1,28 @@
+const ts=require('typescript'),fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict'),path=require('node:path');
+const cache={};function load(file){file=path.resolve(file);if(cache[file])return cache[file].exports;const m={exports:{}};cache[file]=m;const js=ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;vm.runInThisContext(`(function(require,module,exports){${js}\n})`,{filename:file})(name=>name.startsWith('.')?load(path.resolve(path.dirname(file),name+'.ts')):require(name),m,m.exports);return m.exports}
+const a=load('lib/atlas.ts'),r=load('lib/registration.ts');
+const device={id:'phone',name:'Contingência',type:'iphone',model:'Modelo personalizado',location:'Sala TI',owner:'Lucas',slots:['eSIM']};
+const config={...a.defaultConfig,devices:[device]};const line={...a.newLine(),name:'Atendimento',number:'+55 (55) 99999-1234',carrier:'Vivo',deviceId:device.id,slot:'eSIM'};
+assert.equal(r.prepareLine(line,config).number,'55999991234');
+for(const number of ['55123456789','00999991234','559999912345','55abc999991234'])assert.throws(()=>r.prepareLine({...line,number},config));
+assert.throws(()=>r.prepareLine({...line,slot:'Slot 1'},config));
+assert.throws(()=>r.prepareLine({...line,deviceId:'missing'},config));
+const reserve=r.prepareLine({...line,status:'reserve'},config);assert.equal(reserve.deviceId,'phone');
+const cancelled=r.prepareLine({...line,status:'cancelled'},config);assert.equal(cancelled.deviceId,null);assert.equal(cancelled.slot,null);assert.equal(cancelled.location,'Sala TI');
+assert.equal(r.prepareLine({...line,status:'suspended'},config).deviceId,'phone');
+assert.equal(r.prepareLine({...line,deviceId:null},config).slot,null);
+assert.throws(()=>r.checkLineConflicts(r.prepareLine(line,config),[{...r.prepareLine(line,config),id:'other'}]));
+assert.throws(()=>r.checkLineConflicts({...reserve,number:'55999990000'},[{...reserve,id:'other'}]));
+assert.doesNotThrow(()=>r.checkLineConflicts(cancelled,[{...reserve,id:'other',number:'55999990000'}]));
+assert.throws(()=>r.prepareConfig({...config,devices:[{...device,slots:['Slot 1']}]},[reserve]));
+assert.throws(()=>r.prepareConfig({...config,devices:[]},[reserve]));
+assert.throws(()=>r.prepareConfig({...config,devices:[{...device,slots:[]}]},[]));
+assert.equal(r.deviceSlots({...device,slots:undefined}).length,3);
+assert.doesNotThrow(()=>r.prepareLine({...line,deviceId:null,location:'',owner:''},config));
+for(const [input,expected] of [['',null],['0',0],['49,90',4990],['49.90',4990],['1.249,90',124990],['R$ 1.000,00',100000],['1.000',100000]])assert.equal(r.parseCost(input),expected);
+for(const input of ['-1','1e3','NaN','49,999','10abc','1.2.3'])assert.throws(()=>r.parseCost(input));
+assert.throws(()=>r.prepareLine({...line,dueDay:32},config));
+assert.throws(()=>r.prepareLine({...line,name:'   '},config));
+assert(r.sameLine({...reserve,id:'a',version:1}, {...reserve,id:'a',version:2,updatedAt:'later'}));
+assert(!r.sameLine(reserve,{...reserve,name:'Novo nome'}));
+console.log('Cadastro: normalização, custos, reservas, cancelamento, slots e conflitos verificados.');

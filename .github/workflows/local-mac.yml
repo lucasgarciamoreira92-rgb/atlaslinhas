@@ -1,0 +1,26 @@
+name: Validar Atlas Linhas no macOS
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  mac:
+    runs-on: macos-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Instalar e compilar como no Mac do usuário
+        run: bash scripts/instalar-mac.sh
+      - name: Conferir TypeScript
+        run: node node_modules/typescript/bin/tsc --noEmit
+      - name: Testar aplicação com banco e arquivos locais
+        run: npm run local:test

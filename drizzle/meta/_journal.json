@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1789084596223,
+      "tag": "0000_fine_speed",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1789124095157,
+      "tag": "0001_puzzling_fantastic_four",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1789124952752,
+      "tag": "0002_hot_misty_knight",
+      "breakpoints": true
+    }
+  ]
+}
