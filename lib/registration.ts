@@ -41,7 +41,7 @@ export function prepareConfig(input:Config,lines:Line[]):Config {
   return config;
 }
 export function sameLine(a:Line,b:Line){
-  const {id:ai,version:av,updatedAt:at,...left}=a;
-  const {id:bi,version:bv,updatedAt:bt,...right}=b;
+  const {id:ai,version:av,updatedAt:at,...left}={...a,dataPackage:a.dataPackage??''};
+  const {id:bi,version:bv,updatedAt:bt,...right}={...b,dataPackage:b.dataPackage??''};
   return Object.keys(left).every(key=>left[key as keyof typeof left]===right[key as keyof typeof right])&&Object.keys(left).length===Object.keys(right).length;
 }
