@@ -43,6 +43,7 @@ test('pedidos aceitam somente blocos e SHA fixos, recusando comandos e injeçõe
     {...pedido, createdAt: '2026-02-31T21:00:00.000Z'}, {...pedido, createdAt: null},
   ]) assert.throws(() => validateRequest(invalid));
   assert.deepEqual(testArgs('6'), ['test', 'bloco-6-acessos.spec.ts', '--headed']);
+  assert.deepEqual(testArgs('8'), ['test', 'bloco-8-interface.spec.ts', '--headed']);
   assert.deepEqual(testArgs('todos'), ['test', '--headed']);
   assert.throws(() => testArgs('constructor'));
 });
