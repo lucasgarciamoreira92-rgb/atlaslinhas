@@ -18,7 +18,7 @@ Abra **http://localhost:4310** no navegador. Na primeira abertura, crie seu nome
 Para iniciar nos próximos dias:
 
 ```bash
-cd ~/atlaslinhas
+cd ~/Projetos/atlaslinhas
 bash scripts/iniciar-mac.sh
 ```
 
@@ -45,7 +45,7 @@ Pasta padrão: **`~/AtlasLinhas/dados/`**, separada do código e excluída do Gi
 
 A pasta é criada no primeiro início. Atualizar ou apagar uma cópia do código não altera essa pasta. Para mudar sua localização, defina `ATLAS_DATA_DIR` antes de iniciar; use o mesmo caminho nos próximos inícios. `ATLAS_PORT` altera a porta (padrão 4310). Não coloque o banco ativo dentro de pasta de sincronização em nuvem.
 
-O backup JSON da tela contém linhas, aparelhos, configurações e histórico, **sem contas e senhas**. Para uma cópia completa de toda a instalação, pare o aplicativo e copie a pasta `dados` inteira, incluindo `backup.key`. Uma cópia na mesma máquina não protege contra a perda do Mac: guarde a cópia completa também em outro local de sua escolha.
+O backup JSON da tela contém linhas, aparelhos, configurações e histórico, **sem os logins da equipe do Atlas** (contas de serviços e credenciais criptografadas são incluídas na versão nova). Para uma cópia completa de toda a instalação, pare o aplicativo e copie a pasta `dados` inteira, incluindo `backup.key`. Uma cópia na mesma máquina não protege contra a perda do Mac: guarde a cópia completa também em outro local de sua escolha.
 
 Os dados do site antigo não são importados automaticamente. Backups assinados por outra instalação exigem tratamento da chave original pelo programador; não remova a validação de assinatura.
 
@@ -101,3 +101,11 @@ codex
 ```
 
 Também é possível executar diretamente `npm run test:bloco6 -- --headed`. Abra as evidências com `npm run test:relatorio`.
+
+## Verificações, autenticações e Cofre
+
+A nova área organiza contas e seus destinos de confirmação, com vários métodos e aparelhos por conta, responsáveis, pendências e consulta pelas próprias linhas e aparelhos. O Cofre armazena senhas e códigos de recuperação criptografados, com permissões por credencial e desbloqueio usando a senha de acesso ao Atlas.
+
+O backup JSON da versão nova inclui o organizador e o Cofre criptografado. A chave `vault.key`, a assinatura `backup.key` e os usuários locais permanecem na pasta de dados; uma cópia completa dessa pasta, com a aplicação parada, é necessária para recuperação em outro computador. Não envie esses arquivos ao GitHub ou por chat.
+
+Leia [VERIFICACOES-COFRE.md](docs/VERIFICACOES-COFRE.md) antes da primeira atualização. A versão anterior está preservada e a migração cria um checkpoint local automaticamente para instalações existentes.

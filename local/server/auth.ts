@@ -15,6 +15,14 @@ export function sessionIdentity(req:Request):LocalIdentity|null{const t=token(re
 function session(userId:string){const t=randomBytes(32).toString('hex');sqlite.prepare('DELETE FROM local_sessions WHERE expires_at<?').run(Date.now());sqlite.prepare('INSERT INTO local_sessions VALUES(?,?,?)').run(digest(t),userId,Date.now()+ttl);return `${cookieName}=${t}; Path=/; HttpOnly; SameSite=Strict; Max-Age=${ttl/1000}`}
 function json(value:unknown,status=200,cookie?:string){return Response.json(value,{status,headers:{'Cache-Control':'no-store',...(cookie?{'Set-Cookie':cookie}:{})}})}
 function rateLimit(key:string,max:number){const now=Date.now();sqlite.prepare('DELETE FROM local_login_attempts WHERE reset_at<?').run(now);const row=sqlite.prepare('INSERT INTO local_login_attempts(key,attempts,reset_at) VALUES(?,1,?) ON CONFLICT(key) DO UPDATE SET attempts=attempts+1 RETURNING attempts').get(key,now+15*60*1000);if(Number(row!.attempts)>max)throw new AccessError('Muitas tentativas. Aguarde 15 minutos e tente novamente.',429)}
+export function sessionHash(req:Request){return digest(token(req))}
+export async function verifySessionPassword(req:Request,password:string){
+ const actor=await requireActor();rateLimit('vault-password:'+actor.id,10);
+ const row=sqlite.prepare('SELECT password_hash FROM local_credentials WHERE user_id=?').get(actor.id);
+ if(!row||!await validPassword(password,String(row.password_hash)))throw new AccessError('A senha de acesso ao Atlas está incorreta.',403);
+ if(sessionIdentity(req)?.userId!==actor.id||sqlite.prepare('SELECT password_hash FROM local_credentials WHERE user_id=?').get(actor.id)?.password_hash!==row.password_hash)throw new AccessError('A sessão mudou. Entre novamente.',401);
+ sqlite.prepare('DELETE FROM local_login_attempts WHERE key=?').run('vault-password:'+actor.id);
+}
 export function authStatus(req:Request){return json({setupRequired:!sqlite.prepare('SELECT 1 FROM local_credentials LIMIT 1').get(),authenticated:!!sessionIdentity(req)})}
 export async function authAction(action:string,req:Request){
  if(action==='logout'){sqlite.prepare('DELETE FROM local_sessions WHERE token_hash=?').run(digest(token(req)));return json({ok:true},200,`${cookieName}=; Path=/; HttpOnly; SameSite=Strict; Max-Age=0`)}

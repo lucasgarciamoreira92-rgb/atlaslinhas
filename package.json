@@ -23,7 +23,8 @@
     "test:bloco6": "node scripts/test-interface.mjs 6",
     "test:bloco7": "node scripts/test-interface.mjs 7",
     "test:regressao": "node scripts/test-interface.mjs regressao",
-    "test:relatorio": "playwright show-report --host 127.0.0.1"
+    "test:relatorio": "playwright show-report --host 127.0.0.1",
+    "test:access": "node scripts/test-access.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
