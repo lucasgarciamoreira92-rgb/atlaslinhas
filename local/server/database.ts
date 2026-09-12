@@ -1,5 +1,5 @@
 import {DatabaseSync, type SQLInputValue} from 'node:sqlite';
-import {mkdirSync, readFileSync, readdirSync} from 'node:fs';
+import {mkdirSync, readFileSync, readdirSync, existsSync, copyFileSync, writeFileSync, chmodSync, cpSync} from 'node:fs';
 import {join} from 'node:path';
 import {createHash} from 'node:crypto';
 
@@ -11,10 +11,19 @@ export function openDatabase(directory:string, root:string) {
  sqlite.exec('CREATE TABLE IF NOT EXISTS local_migrations (name TEXT PRIMARY KEY, checksum TEXT NOT NULL)');
  const migrations=readdirSync(join(root,'drizzle')).filter(n=>/^\d+.*\.sql$/.test(n)).sort().map(n=>({name:n,path:join(root,'drizzle',n)}));
  migrations.push({name:'local-auth-v1',path:join(root,'local','server','schema.sql')});
+ const localDir=join(root,'local','server','migrations');
+ if(existsSync(localDir))for(const name of readdirSync(localDir).filter(n=>/^[0-9]+.*\.sql$/.test(n)).sort())migrations.push({name:'local-'+name,path:join(localDir,name)});
  for(const m of migrations){
   const sql=readFileSync(m.path,'utf8'), checksum=createHash('sha256').update(sql).digest('hex');
   const old=sqlite.prepare('SELECT checksum FROM local_migrations WHERE name=?').get(m.name);
   if(old){if(old.checksum!==checksum)throw Error('Migração já aplicada foi modificada: '+m.name);continue;}
+  if(m.name==='local-0002-access-vault.sql'&&sqlite.prepare('SELECT 1 FROM local_credentials LIMIT 1').get()){
+   const checkpoint=join(directory,'checkpoints','pre-access-'+Date.now());mkdirSync(checkpoint,{recursive:true,mode:0o700});
+   const file=join(checkpoint,'atlas-linhas.sqlite');sqlite.prepare('VACUUM INTO ?').run(file);chmodSync(file,0o600);
+   for(const key of ['backup.key','vault.key'])if(existsSync(join(directory,key))){copyFileSync(join(directory,key),join(checkpoint,key));chmodSync(join(checkpoint,key),0o600)}
+   if(existsSync(join(directory,'backups')))cpSync(join(directory,'backups'),join(checkpoint,'backups'),{recursive:true,errorOnExist:true,force:false});
+   writeFileSync(join(checkpoint,'README.txt'),'Cópia anterior à migração de Verificações e Cofre. Pare o aplicativo antes de restaurar. Preserve os dados posteriores em outra cópia. Ver docs/VERIFICACOES-COFRE.md.\n',{mode:0o600});
+  }
   sqlite.exec('BEGIN IMMEDIATE');
   try{sqlite.exec(sql);sqlite.prepare('INSERT INTO local_migrations VALUES(?,?)').run(m.name,checksum);sqlite.exec('COMMIT')}catch(e){sqlite.exec('ROLLBACK');throw e;}
  }

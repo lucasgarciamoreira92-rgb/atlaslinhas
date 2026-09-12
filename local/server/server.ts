@@ -4,6 +4,8 @@ import {join,extname,resolve,sep} from 'node:path';
 import {projectRoot,dataDirectory,sqlite} from './environment';
 import {identityContext} from './identity';
 import {authStatus,authAction,sessionIdentity,teamPost,errorResponse} from './auth';
+import {accessGET,accessPOST} from './access-service';
+import {vaultPOST} from './vault';
 import * as lines from '@/app/api/lines/route';
 import * as settings from '@/app/api/settings/route';
 import * as history from '@/app/api/history/route';
@@ -14,7 +16,7 @@ import * as restore from '@/app/api/restore/route';
 import * as csv from '@/app/api/export/route';
 
 type Handler=(req:Request)=>Promise<Response>;
-const routes:Record<string,Partial<Record<string,Handler>>>={'/api/lines':lines,'/api/settings':settings,'/api/history':history,'/api/me':me,'/api/team':{GET:team.GET,POST:teamPost},'/api/backups':backups,'/api/restore':restore,'/api/export':csv};
+const routes:Record<string,Partial<Record<string,Handler>>>={'/api/access':{GET:accessGET,POST:accessPOST},'/api/vault':{POST:vaultPOST},'/api/lines':lines,'/api/settings':settings,'/api/history':history,'/api/me':me,'/api/team':{GET:team.GET,POST:teamPost},'/api/backups':backups,'/api/restore':restore,'/api/export':csv};
 const port=Number(process.env.ATLAS_PORT||4310);if(!Number.isInteger(port)||port<1024||port>65535)throw Error('ATLAS_PORT deve estar entre 1024 e 65535.');
 const allowedHosts=new Set([`127.0.0.1:${port}`,`localhost:${port}`]);
 const staticRoot=join(projectRoot,'local-dist','client');

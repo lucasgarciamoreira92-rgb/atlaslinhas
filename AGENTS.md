@@ -2,7 +2,7 @@
 
 ## Continuidade aprovada pelo usuário (11/09/2026)
 
-- Aplicação local no Mac em ~/atlaslinhas; repositório lucasgarciamoreira92-rgb/atlaslinhas.
+- Aplicação local no Mac em ~/Projetos/atlaslinhas; repositório lucasgarciamoreira92-rgb/atlaslinhas.
 - Blocos operacionais 1, 2, 3, 4 e 5 aprovados pelo usuário.
 - Em 12/09/2026, blocos 1–7 revalidados no Mac do usuário: 9 cenários aprovados, sem falhas ou ignorados. Run 34688123499. Bloco 8 automatizado aprovado em 12/09/2026: cinco cenários, zero falhas, run 34688556772. Ver docs/VALIDACAO-LOCAL.md; não pedir repetição manual dos critérios já automatizados. Reinício automático do executor após reiniciar o Mac ainda não validado.
 - Bloco 6: acessos/operador. Bloco 7: CSV/backups/recuperação. Bloco 8: aceite final.
@@ -34,3 +34,15 @@
 - Preserve design Atlas, telas e funções fora da alteração solicitada. Não publicar o Site antigo.
 - GitHub já autorizado para o trabalho do projeto; preserve alterações locais de outras pessoas, não force push e nunca comite relatórios com dados reais, sessões, senhas do usuário ou bancos.
 - Integração final no servidor Atlas será feita por outro programador. Não montar servidor dedicado.
+
+## Verificações e Cofre — versão de 12/09/2026
+
+- Escopo aprovado: organizador conectado, vários métodos e destinos por conta, consulta rápida, Cofre, perfis e exceções por credencial, pendências e histórico. Recebimento/geração de códigos e integração ao Atlas principal continuam adiados.
+- Não publicar o Site antigo. A implementação nova existe somente no servidor local.
+- Migração adicional `local/server/migrations/0002-access-vault.sql`; não editar depois de aplicada. Instalação existente recebe checkpoint antes da migração, na pasta de dados.
+- Ponto anterior preservado: branch `rollback/pre-verificacoes-cofre-20260912`, commit `b363c3902307bb36515198eb4d0098c19f2a6339`.
+- Senhas/códigos de recuperação nunca entram em contas, histórico, logs ou CSV. `vault.key` fica fora do banco e do backup JSON. Não regenerar chave perdida.
+- Desbloqueios são vinculados à sessão, conta, versão, finalidade, local de abertura e prazo. Verificar autorização novamente no servidor para leitura e escrita.
+- Não restaurar permissões mais amplas de um backup antigo. Preservar os acessos atuais ou reduzi-los, invalidando desbloqueios.
+- `npm run test:access` cobre o servidor e migração; `tests/e2e/verificacoes-cofre.spec.ts` cobre os novos fluxos no navegador e entra no bloco `todos`.
+- Documentação e retorno: `docs/VERIFICACOES-COFRE.md`.

@@ -32,9 +32,9 @@ test('bloco 8: menu recolhível, três destinos, formulários e fechamento sem s
   const nav = page.getByRole('navigation', {name: 'Menu principal'});
   const toggle = nav.getByRole('button', {name: 'Configurações', exact: true});
   if (await toggle.getAttribute('aria-expanded') === 'true') await toggle.click();
-  await expect(nav.getByRole('button')).toHaveCount(2);
+  await expect(nav.getByRole('button')).toHaveCount(4);
   await toggle.click();
-  await expect(nav.getByRole('button')).toHaveCount(5);
+  await expect(nav.getByRole('button')).toHaveCount(7);
   for (const name of ['Minhas linhas', 'Chips em reserva']) {
     await nav.getByRole('button', {name: new RegExp('^' + name)}).click();
     await expect(page.getByRole('heading', {name, exact: true})).toBeVisible();

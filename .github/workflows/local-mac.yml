@@ -29,6 +29,8 @@ jobs:
         run: bash scripts/ativar-testes-automaticos-mac.sh verificar-ferramentas
       - name: Testar aplicação com banco e arquivos locais
         run: npm run local:test
+      - name: Testar verificações, Cofre e migração
+        run: npm run test:access
       - name: Instalar navegador de testes
         run: node node_modules/@playwright/test/cli.js install chromium
       - name: Testar interface com dados temporários
