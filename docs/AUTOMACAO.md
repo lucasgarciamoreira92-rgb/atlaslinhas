@@ -2,7 +2,7 @@
 
 ## Ponto de retomada
 
-Em 12/09/2026, a rodada completa no Mac de Lucas aprovou nove cenários de interface abrangendo os blocos 1–7. [Resultado](https://github.com/lucasgarciamoreira92-rgb/atlaslinhas-validacao-mac/actions/runs/34688123499). O próximo passo é o aceite humano do bloco 8.
+Em 12/09/2026, a rodada completa no Mac de Lucas aprovou nove cenários de interface abrangendo os blocos 1–7. [Resultado](https://github.com/lucasgarciamoreira92-rgb/atlaslinhas-validacao-mac/actions/runs/34688123499). O bloco 8 tem agora cinco cenários próprios aprovados no Mac (run 34688556772); critérios objetivos automatizados e aprovação estética são distintos.
 
 O executor privado já está conectado. Solicitar `todos` executa todos os arquivos de interface, incluindo `bloco-1-5.spec.ts`, regressão e blocos 6/7. Não é necessário abrir Codex ou copiar comandos para cada rodada. Os procedimentos de instalação abaixo ficam como referência para uma instalação nova.
 ## Preparar o Mac uma vez
@@ -86,3 +86,7 @@ Os blocos 6 e 7 só devem ser registrados como validados no Mac após a execuç�
 - [Codex CLI — instalação e comandos](https://learn.chatgpt.com/docs/codex/cli)
 - [Autenticação do Codex](https://learn.chatgpt.com/docs/auth)
 - [Playwright — execução e relatórios](https://playwright.dev/docs/running-tests)
+
+## Executar somente o bloco 8
+
+No controle privado, solicitar `bloco: "8"`. Localmente: `node scripts/test-interface.mjs 8 --headed`. A execução guarda capturas do dashboard e do histórico no relatório, inclusive quando passa. Ver cobertura e resultado em VALIDACAO-LOCAL.md.

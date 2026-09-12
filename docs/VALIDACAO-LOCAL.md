@@ -1,6 +1,6 @@
 # Validações operacionais — versão Mac
 
-Status em 12/09/2026: blocos 1–7 revalidados automaticamente no Mac de Lucas, com dados fictícios isolados. Nove cenários aprovados, zero falhas, instáveis ou ignorados. [Execução e evidências](https://github.com/lucasgarciamoreira92-rgb/atlaslinhas-validacao-mac/actions/runs/34688123499). Próximo: bloco 8, aceite humano visual e de uso.
+Status em 12/09/2026: blocos 1–7 revalidados automaticamente no Mac de Lucas, com dados fictícios isolados. Nove cenários aprovados, zero falhas, instáveis ou ignorados. [Execução e evidências](https://github.com/lucasgarciamoreira92-rgb/atlaslinhas-validacao-mac/actions/runs/34688123499). Bloco 8 automatizado aprovado também: cinco cenários, sem falhas ou ignorados, na execução abaixo.
 
 A rodada cobre os fluxos abaixo por cenários combinados, incluindo Android, iPhone, múltiplos eSIMs, API/reserva, histórico de campos, filtros, conflitos, acessos e backups. Não representa cobertura exaustiva nem teste dos cadastros reais. A instalação foi executada na cópia isolada; reinício do servidor foi testado, mas reinício físico do Mac e partida automática do executor permanecem sem validação.
 
@@ -30,3 +30,16 @@ Aceite: acesso independente, perfil correto e telas funcionando. Recarregar ou e
 Usar uma janela anônima permite testar um operador simultaneamente sem acesso ao Mac de outra pessoa. A versão local fica ligada somente ao próprio Mac: celular na rede e sessão unificada do Atlas serão validados após a integração pelo programador, não bloqueiam o aceite local.
 
 Em cada bloco, registrar data, aprovado/ajuste/bloqueado, passos executados e resultado. Não executar recuperação de um inventário importante sem conferir a prévia e preservar a cópia atual. Nenhum dado real foi incluído nos testes de desenvolvimento.
+
+
+## Bloco 8 — resultado automático em 12/09/2026
+
+[Execução no Mac de Lucas](https://github.com/lucasgarciamoreira92-rgb/atlaslinhas-validacao-mac/actions/runs/34688556772). Código testado: `3f5d3477e38c8fba5af81b7780dc3e3cbfd55d9e`. macOS/darwin 25.6.0, Node 24.21.0, Chromium visível. Cinco cenários aprovados, zero falhas, instáveis ou ignorados, em 41,6 segundos.
+
+- Menu recolhido com dois destinos, expansão com três submenus e acesso às telas.
+- Abertura/fechamento de formulário de aparelho; edição de linha descartada sem salvar.
+- Número e aparelho em destaque; eSIM 1, GB, mensalidade e vencimento no card.
+- Hover 1,025 em cards e indicadores, retorno ao normal, cores preservadas e respeito à redução de movimento.
+- Larguras 1280, 768 e 390: ausência de rolagem horizontal da página/formulário, salvar acessível, edição persistida no histórico, fechamento e navegação. Nenhum erro JavaScript não tratado nesses cenários.
+
+Capturas de dashboard e histórico foram anexadas ao relatório privado. Os dados são fictícios e isolados. Este resultado verifica critérios objetivos de interface; não equivale a uma avaliação estética humana nem prova ausência de todo tipo de sobreposição. Reinício físico do Mac e retorno automático do executor seguem sem validação prática.
