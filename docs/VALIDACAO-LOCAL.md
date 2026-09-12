@@ -1,6 +1,8 @@
 # Validações operacionais — versão Mac
 
-Status em 11/09/2026: blocos 1 a 5 aprovados pelo usuário. Validações pausadas após o bloco 5. **Retomar pelo bloco 6 com a automação de interface**, conforme [AUTOMACAO.md](AUTOMACAO.md). Os procedimentos abaixo preservam o roteiro original como referência. Uma execução em CI ou Linux não substitui a comprovação da execução no Mac do usuário.
+Status em 12/09/2026: blocos 1–7 revalidados automaticamente no Mac de Lucas, com dados fictícios isolados. Nove cenários aprovados, zero falhas, instáveis ou ignorados. [Execução e evidências](https://github.com/lucasgarciamoreira92-rgb/atlaslinhas-validacao-mac/actions/runs/34688123499). Próximo: bloco 8, aceite humano visual e de uso.
+
+A rodada cobre os fluxos abaixo por cenários combinados, incluindo Android, iPhone, múltiplos eSIMs, API/reserva, histórico de campos, filtros, conflitos, acessos e backups. Não representa cobertura exaustiva nem teste dos cadastros reais. A instalação foi executada na cópia isolada; reinício do servidor foi testado, mas reinício físico do Mac e partida automática do executor permanecem sem validação.
 
 ## Bloco 1 — instalação, acesso e inventário real
 

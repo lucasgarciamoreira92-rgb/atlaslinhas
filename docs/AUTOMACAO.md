@@ -2,10 +2,9 @@
 
 ## Ponto de retomada
 
-Em 11/09/2026, o usuário confirmou os blocos operacionais 1 a 5 como funcionais. A validação foi pausada após o bloco 5. **A retomada é pelo bloco 6**, usando o navegador automatizado. O bloco 7 e o aceite final do bloco 8 vêm depois.
+Em 12/09/2026, a rodada completa no Mac de Lucas aprovou nove cenários de interface abrangendo os blocos 1–7. [Resultado](https://github.com/lucasgarciamoreira92-rgb/atlaslinhas-validacao-mac/actions/runs/34688123499). O próximo passo é o aceite humano do bloco 8.
 
-O Codex CLI recebe os pedidos e executa os comandos no Mac. O Playwright opera um navegador de teste e verifica resultados. Os testes também podem ser executados diretamente, sem uma sessão Codex. Esta conversa não conecta automaticamente ao Mac; AGENTS.md preserva o contexto necessário no repositório.
-
+O executor privado já está conectado. Solicitar `todos` executa todos os arquivos de interface, incluindo `bloco-1-5.spec.ts`, regressão e blocos 6/7. Não é necessário abrir Codex ou copiar comandos para cada rodada. Os procedimentos de instalação abaixo ficam como referência para uma instalação nova.
 ## Preparar o Mac uma vez
 
 **Fluxo recomendado agora:** usar o [executor automático no Mac](EXECUTOR-MAC.md). Ele recebe pedidos pelo GitHub e executa sem abrir Codex ou colar instruções a cada rodada. A instalação e o primeiro acionamento estão descritos nesse documento. O fluxo com Codex abaixo continua disponível para investigação manual.

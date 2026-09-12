@@ -4,7 +4,7 @@
 
 - Aplicação local no Mac em ~/atlaslinhas; repositório lucasgarciamoreira92-rgb/atlaslinhas.
 - Blocos operacionais 1, 2, 3, 4 e 5 aprovados pelo usuário.
-- Validações pausadas após o bloco 5. **Retomar pelo bloco 6 usando a automação de interface**.
+- Em 12/09/2026, blocos 1–7 revalidados no Mac do usuário: 9 cenários aprovados, sem falhas ou ignorados. Run 34688123499. Próximo: bloco 8, aceite humano visual e de uso. Reinício automático do executor após reiniciar o Mac ainda não validado.
 - Bloco 6: acessos/operador. Bloco 7: CSV/backups/recuperação. Bloco 8: aceite final.
 - O resultado automatizado deve identificar ambiente, commit, testes executados, falhas e limitações. Não marcar validação no Mac do usuário como feita por uma execução em CI/Linux.
 - A conversa do ChatGPT não é compartilhada automaticamente com a sessão CLI. Leia este arquivo e docs/AUTOMACAO.md ao iniciar.
