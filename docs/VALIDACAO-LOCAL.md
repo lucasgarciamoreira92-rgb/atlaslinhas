@@ -1,8 +1,8 @@
 # Validações operacionais — versão Mac
 
-Status em 12/09/2026: blocos 1–7 revalidados automaticamente no Mac de Lucas, com dados fictícios isolados. Nove cenários aprovados, zero falhas, instáveis ou ignorados. [Execução e evidências](https://github.com/lucasgarciamoreira92-rgb/atlaslinhas-validacao-mac/actions/runs/34688123499). Bloco 8 automatizado aprovado também: cinco cenários, sem falhas ou ignorados, na execução abaixo.
+Registro dos blocos anteriores em 12/09/2026: blocos 1–7 revalidados automaticamente no Mac de Lucas, com dados fictícios isolados. Nove cenários aprovados, zero falhas, instáveis ou ignorados. [Execução e evidências](https://github.com/lucasgarciamoreira92-rgb/atlaslinhas-validacao-mac/actions/runs/34688123499). Bloco 8 automatizado aprovado também: cinco cenários, sem falhas ou ignorados, na execução abaixo.
 
-A rodada cobre os fluxos abaixo por cenários combinados, incluindo Android, iPhone, múltiplos eSIMs, API/reserva, histórico de campos, filtros, conflitos, acessos e backups. Não representa cobertura exaustiva nem teste dos cadastros reais. A instalação foi executada na cópia isolada; reinício do servidor foi testado, mas reinício físico do Mac e partida automática do executor permanecem sem validação.
+A rodada cobre os fluxos abaixo por cenários combinados, incluindo Android, iPhone, múltiplos eSIMs, API/reserva, histórico de campos, filtros, conflitos, acessos e backups. Não representa cobertura exaustiva nem teste dos cadastros reais. A instalação foi executada na cópia isolada; reinício do servidor foi testado, mas o retorno do executor após reinício físico do Mac foi validado posteriormente no run 34710270685 (14 cenários aprovados).
 
 ## Bloco 1 — instalação, acesso e inventário real
 
@@ -42,4 +42,9 @@ Em cada bloco, registrar data, aprovado/ajuste/bloqueado, passos executados e re
 - Hover 1,025 em cards e indicadores, retorno ao normal, cores preservadas e respeito à redução de movimento.
 - Larguras 1280, 768 e 390: ausência de rolagem horizontal da página/formulário, salvar acessível, edição persistida no histórico, fechamento e navegação. Nenhum erro JavaScript não tratado nesses cenários.
 
-Capturas de dashboard e histórico foram anexadas ao relatório privado. Os dados são fictícios e isolados. Este resultado verifica critérios objetivos de interface; não equivale a uma avaliação estética humana nem prova ausência de todo tipo de sobreposição. Reinício físico do Mac e retorno automático do executor seguem sem validação prática.
+Capturas de dashboard e histórico foram anexadas ao relatório privado. Os dados são fictícios e isolados. Este resultado verifica critérios objetivos de interface; não equivale a uma avaliação estética humana nem prova ausência de todo tipo de sobreposição. O retorno do executor após reinício físico do Mac foi validado posteriormente no run 34710270685 (14 cenários aprovados).
+
+
+## Nova versão — Verificações e Cofre
+
+Em 12/09/2026, a suíte foi ampliada de 14 para 17 cenários. O macOS do GitHub aprovou todos no run 34719023851, incluindo as três larguras e os novos fluxos. Isso não equivale à execução no Mac do usuário. O pedido local run 34719284402 foi preparado e aguardava o executor no registro da entrega; confira o resultado atual antes de considerá-lo aprovado. Detalhes: [VERIFICACOES-COFRE.md](VERIFICACOES-COFRE.md).

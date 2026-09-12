@@ -81,3 +81,14 @@ Voltar apenas o código é diferente de restaurar o banco. Não apague chaves ne
 - A suíte completa mantém os blocos anteriores. A expectativa do menu foi atualizada para os dois destinos novos, preservando os três submenus de Configurações.
 
 Execuções em Linux/CI não constituem validação no Mac do usuário. Registrar o ambiente e o commit de cada rodada. Testes nunca utilizam o inventário real.
+
+
+## Registro de entrega — 12/09/2026
+
+Implementação disponível na main pelo PR #1, merge `e7db968cf32236c9fecb3440c38f2545becd0afc`. A árvore de código é a mesma validada no commit `beae5faca13b5563024e4a0957135da58f4ee2f6`.
+
+No macOS hospedado pelo GitHub, [run 34719023851](https://github.com/lucasgarciamoreira92-rgb/atlaslinhas/actions/runs/34719023851): 17 cenários de interface aprovados, zero falhas ou ignorados, em cerca de 2,1 minutos. Compilação, TypeScript, automação, instalador, regressão HTTP/SQLite, Cofre e migração também passaram. Capturas dos múltiplos destinos, Cofre oculto e das três larguras constam do relatório. Os primeiros roteiros de interface foram corrigidos quanto a seletores e esperas de animação; as verificações de negócio foram mantidas.
+
+A rodada isolada no Mac de Lucas foi solicitada para o merge acima: [run 34719284402](https://github.com/lucasgarciamoreira92-rgb/atlaslinhas-validacao-mac/actions/runs/34719284402). A preparação do pedido passou; o job do Mac ainda aguardava o executor ao registrar esta entrega. Não considerar essa rodada local aprovada até conferir seu resultado. O pedido não atualiza a instalação de uso diário nem acessa seu banco real.
+
+Para experimentar a versão no uso diário, atualize e inicie pelo procedimento no começo deste documento. O organizador começa sem contas fictícias; a migração preserva o inventário existente e cria o checkpoint descrito acima.

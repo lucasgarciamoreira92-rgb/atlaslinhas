@@ -4,7 +4,7 @@
 
 - Aplicação local no Mac em ~/Projetos/atlaslinhas; repositório lucasgarciamoreira92-rgb/atlaslinhas.
 - Blocos operacionais 1, 2, 3, 4 e 5 aprovados pelo usuário.
-- Em 12/09/2026, blocos 1–7 revalidados no Mac do usuário: 9 cenários aprovados, sem falhas ou ignorados. Run 34688123499. Bloco 8 automatizado aprovado em 12/09/2026: cinco cenários, zero falhas, run 34688556772. Ver docs/VALIDACAO-LOCAL.md; não pedir repetição manual dos critérios já automatizados. Reinício automático do executor após reiniciar o Mac ainda não validado.
+- Em 12/09/2026, blocos 1–7 revalidados no Mac do usuário: 9 cenários aprovados, sem falhas ou ignorados. Run 34688123499. Bloco 8 automatizado aprovado em 12/09/2026: cinco cenários, zero falhas, run 34688556772. Ver docs/VALIDACAO-LOCAL.md; não pedir repetição manual dos critérios já automatizados. Retorno do executor após reiniciar o Mac e entrar no usuário validado no run 34710270685, com 14 cenários aprovados.
 - Bloco 6: acessos/operador. Bloco 7: CSV/backups/recuperação. Bloco 8: aceite final.
 - O resultado automatizado deve identificar ambiente, commit, testes executados, falhas e limitações. Não marcar validação no Mac do usuário como feita por uma execução em CI/Linux.
 - A conversa do ChatGPT não é compartilhada automaticamente com a sessão CLI. Leia este arquivo e docs/AUTOMACAO.md ao iniciar.
@@ -46,3 +46,5 @@
 - Não restaurar permissões mais amplas de um backup antigo. Preservar os acessos atuais ou reduzi-los, invalidando desbloqueios.
 - `npm run test:access` cobre o servidor e migração; `tests/e2e/verificacoes-cofre.spec.ts` cobre os novos fluxos no navegador e entra no bloco `todos`.
 - Documentação e retorno: `docs/VERIFICACOES-COFRE.md`.
+
+- Entrega do módulo na main pelo PR #1: merge `e7db968cf32236c9fecb3440c38f2545becd0afc`. CI macOS run 34719023851 aprovou 17 cenários de interface e as verificações de servidor/Cofre/migração. A rodada no Mac do usuário foi solicitada no run 34719284402 e aguardava o executor; conferir antes de afirmar aprovação local. Ver registro em `docs/VERIFICACOES-COFRE.md`.
