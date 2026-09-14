@@ -36,7 +36,7 @@ test('assistente: Cofre protegido, aprovação, edição e limpeza ao sair',asyn
  await unlock();await pane.getByLabel('Senha da conta',{exact:true}).fill(secret+'-editada');
  await pane.getByRole('button',{name:'Salvar credencial',exact:true}).click();
  await expect(pane.getByRole('button',{name:'Alterar credencial',exact:true})).toBeVisible();
- const vault=async(body:object)=>{const r=await page.request.post('/api/vault',{data:{id:account.id,scope:'vault',...body}});expect(r.ok()).toBe(true);return r.json()};
+ const vault=async(body:object)=>{const r=await page.request.post('/api/vault',{headers:{Origin:new URL(page.url()).origin},data:{id:account.id,scope:'vault',...body}});expect(r.ok()).toBe(true);return r.json()};
  const {token}=await vault({action:'unlock',password:admin.password,purpose:'read'});
  expect((await vault({action:'read',token,field:'password',intent:'reveal'})).value).toBe(secret+'-editada');
  expect((await vault({action:'read',token,field:'recoveryCodes',intent:'reveal'})).value).toBe(codes);
