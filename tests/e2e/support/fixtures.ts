@@ -1,9 +1,10 @@
 import {test as base, expect, type Page} from '@playwright/test';
 import {isolatedServer} from './server';
 
-export const test = base.extend<{app: Awaited<ReturnType<typeof isolatedServer>>; operatorPage: Page}>({
-  app: async ({}, use, info) => {
-    const app = await isolatedServer();
+export const test = base.extend<{app: Awaited<ReturnType<typeof isolatedServer>>; operatorPage: Page; assistantStub:boolean}>({
+  assistantStub: [false,{option:true}],
+  app: async ({assistantStub}, use, info) => {
+    const app = await isolatedServer(assistantStub);
     try { await use(app); }
     finally {
       if (info.status !== info.expectedStatus) await info.attach('servidor-de-teste', {body: app.logs(), contentType: 'text/plain'});

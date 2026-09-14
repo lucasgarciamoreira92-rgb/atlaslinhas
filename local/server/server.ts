@@ -7,6 +7,7 @@ import {authStatus,authAction,sessionIdentity,teamPost,errorResponse} from './au
 import {accessGET,accessPOST} from './access-service';
 import {vaultPOST} from './vault';
 import {assistantGET,assistantPOST} from './assistant';
+import {conversationPOST} from './assistant-conversation';
 import {configureAssistant} from './assistant-config';
 import {assistantCatalogGET} from './assistant-catalog';
 import {assistantProposalPOST} from './assistant-proposals';
@@ -25,6 +26,7 @@ type Handler=(req:Request)=>Promise<Response>;
 const routes:Record<string,Partial<Record<string,Handler>>>={'/api/access':{GET:accessGET,POST:accessPOST},'/api/vault':{POST:vaultPOST},'/api/lines':lines,'/api/settings':settings,'/api/history':history,'/api/me':me,'/api/team':{GET:team.GET,POST:teamPost},'/api/backups':backups,'/api/restore':restore,'/api/export':csv};
 const port=Number(process.env.ATLAS_PORT||4310);if(!Number.isInteger(port)||port<1024||port>65535)throw Error('ATLAS_PORT deve estar entre 1024 e 65535.');
 routes['/api/assistant']={GET:assistantGET,POST:assistantPOST};
+routes['/api/assistant/conversation']={POST:conversationPOST};
 routes['/api/assistant/config']={POST:configureAssistant};
 routes['/api/assistant/catalog']={GET:assistantCatalogGET};
 routes['/api/assistant/proposals']={POST:assistantProposalPOST};
