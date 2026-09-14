@@ -83,3 +83,9 @@ Referência: https://developers.openai.com/api/docs/guides/structured-outputs
 - Resultado: https://github.com/lucasgarciamoreira92-rgb/atlaslinhas-validacao-mac/actions/runs/34799157222
 
 Validação de interface pendente: pedido corrigido no run 34841417082, fonte 0a1b61201f8c3704c19e1d016f4c33412d74a3c3. O run anterior 34841223115 aguardava o Mac antes dele, com a versão anterior das perguntas. Não considerar a interface validada. Ao retomar, conferir ambos os runs antes de solicitar novamente; não criar pedidos duplicados. Cinco cenários previstos no bloco assistente, incluindo o novo cenário de contas/múltiplos destinos. Mac deve estar acordado, conectado e com sessão aberta.
+
+## Encerramento da etapa 6 — validação conferida
+
+O pedido corrigido 34841417082 foi concluído com sucesso no Mac de Lucas: fonte `0a1b61201f8c3704c19e1d016f4c33412d74a3c3`, cinco testes do bloco assistente aprovados, zero falhas, instáveis ou ignorados. Resultado em 14/09/2026 às 12:07 UTC (09:07 em Brasília). Cenário de contas, múltiplos destinos, resumo corrigido e edição aprovada executado com dados fictícios. A rodada anterior 34841223115 falhou; o resultado válido é o da versão corrigida. A pendência de interface da etapa 6 está encerrada; não acionar novamente apenas por existir o registro histórico de fila acima. Próxima etapa: campo protegido do Cofre no painel, sem segredos na conversa. Integração real da IA permanece para o final. Instalação diária não é atualizada pela automação.
+
+Resultado: https://github.com/lucasgarciamoreira92-rgb/atlaslinhas-validacao-mac/actions/runs/34841417082
