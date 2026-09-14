@@ -27,6 +27,14 @@ Após o teste, `Começar a conversar` abre a conversa existente. Também é poss
 - `tests/e2e/assistant-config.spec.ts`: tutorial, campos em 1280/768/390 px, salvamento sem chamada externa, teste explícito, erros, reabertura e limpeza dos campos. Validar após publicar, no bloco `assistente` do Mac.
 - Ativação com uma chave real e avaliação do modelo na conta do usuário dependem do preenchimento local. Os testes automatizados não configuram a instalação de uso diário.
 
+### Resultado no Mac
+
+Em **14/09/2026 às 14:27:15 de Brasília (17:27:15 UTC)**, o bloco `assistente` passou no Mac de Lucas: **11 aprovados, zero falhas, zero instáveis e zero ignorados**, em 36 segundos. Ambiente darwin 25.6.0 / Node v24.21.0. Código testado: `d68c615f58d0a9de24bd8ea28a327df3f6ae32ea`.
+
+[Resultado e capturas](https://github.com/lucasgarciamoreira92-rgb/atlaslinhas-validacao-mac/actions/runs/34874673619).
+
+A rodada anterior aprovou dez cenários e interrompeu um por ambiguidade do seletor `status`, que também encontrava o contador de linhas. O teste passou a consultar o status dentro do painel de configuração, preservando a expectativa original. Nenhuma alteração no produto foi necessária para corrigir essa falha de teste.
+
 ## Referências oficiais consultadas
 
 - [Primeira chamada e criação de chave](https://developers.openai.com/api/docs/quickstart)
