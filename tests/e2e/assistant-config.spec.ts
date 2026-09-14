@@ -51,7 +51,7 @@ test('assistente: configuração privada, senha e persistência',async({page,app
  await page.getByLabel('Chave da API',{exact:true}).fill('sk-ficticia-nao-e-uma-chave-real');
  await page.getByLabel('Sua senha de acesso ao Atlas',{exact:true}).fill(admin.password);
  await page.getByRole('button',{name:'Salvar configuração',exact:true}).click();
- await expect(page.getByRole('status')).toContainText('Configuração salva · teste pendente');
+ await expect(page.getByRole('region',{name:'Configuração do assistente',exact:true}).getByRole('status')).toContainText('Configuração salva · teste pendente');
  await page.getByRole('button',{name:'Ir para conversa sem testar',exact:true}).click();
  await expect(page.getByLabel('Mensagem',{exact:true})).toBeEnabled();
  await expect(page.locator('.atlas-assistant')).not.toContainText('sk-ficticia');
