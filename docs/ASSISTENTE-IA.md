@@ -81,3 +81,5 @@ Referência: https://developers.openai.com/api/docs/guides/structured-outputs
 - Os testes usam cópia isolada e banco temporário. Não atualizam a instalação diária nem usam seus cadastros reais.
 - Decisão do usuário: prévias aqui servem à avaliação visual; validações de navegador ocorrem após publicação, pelo fluxo macOS/Mac configurado.
 - Resultado: https://github.com/lucasgarciamoreira92-rgb/atlaslinhas-validacao-mac/actions/runs/34799157222
+
+Validação de interface pendente: pedido corrigido no run 34841417082, fonte 0a1b61201f8c3704c19e1d016f4c33412d74a3c3. O run anterior 34841223115 aguardava o Mac antes dele, com a versão anterior das perguntas. Não considerar a interface validada. Ao retomar, conferir ambos os runs antes de solicitar novamente; não criar pedidos duplicados. Cinco cenários previstos no bloco assistente, incluindo o novo cenário de contas/múltiplos destinos. Mac deve estar acordado, conectado e com sessão aberta.
