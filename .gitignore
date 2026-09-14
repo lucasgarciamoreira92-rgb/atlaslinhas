@@ -55,6 +55,10 @@ next-env.d.ts
 *.sqlite-wal
 *.db
 backup.key
+openai-config.json
+openai-config.json.*.tmp
+/dados/
+vault.key
 
 # Evidence generated exclusively from isolated UI test runs.
 /playwright-report/
