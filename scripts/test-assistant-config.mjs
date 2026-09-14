@@ -134,6 +134,28 @@ try{
  console.log('PASS: contas com aprovação, múltiplos destinos, 2FA independente, permissões restritas/preservadas, histórico, vínculos inválidos, autorrecuperação e conflito entre revisão e gravação.');
  await req('/api/assistant',403,null,op);await req('/api/assistant/config',403,config,op);
  await req('/api/assistant/config',403,{...config,password:'incorreta'},admin);
+ // Cofre no assistente: escopo próprio, permissão, confirmação e isolamento dos segredos.
+ const vault=(body,status=200,cookie=admin)=>req('/api/vault',status,{id:account.id,scope:'assistant',...body},cookie);
+ await vault({action:'unlock',password,purpose:'write'},404,op);
+ await vault({action:'unlock',password,purpose:'read'},403);
+ const writeKey=(await vault({action:'unlock',password,purpose:'write'})).data.token;
+ await vault({action:'write',token:writeKey,scope:'vault',secret:{password:'nao-salvar'}},403);
+ await vault({action:'write',token:writeKey,secret:{password:'nao-salvar'}},404,op);
+ const testSecret='senha-ficticia-etapa7',testCodes='recuperacao-ficticia-etapa7';
+ await vault({action:'write',token:writeKey,secret:{password:testSecret,recoveryCodes:testCodes}});
+ await vault({action:'write',token:writeKey,secret:{password:'nao-salvar'}},403);
+ const secondKey=(await vault({action:'unlock',password,purpose:'write'})).data.token;
+ await vault({action:'write',token:secondKey,secret:{password:testSecret+'-editada'}});
+ const readKey=(await vault({action:'unlock',scope:'vault',password,purpose:'read'})).data.token;
+ assert.equal((await vault({action:'read',scope:'vault',token:readKey,field:'password',intent:'reveal'})).data.value,testSecret+'-editada');
+ assert.equal((await vault({action:'read',scope:'vault',token:readKey,field:'recoveryCodes',intent:'reveal'})).data.value,testCodes);
+ await vault({action:'read',token:readKey,field:'password',intent:'reveal'},403);
+ for(const path of ['/api/access','/api/access?history='+account.id,'/api/assistant/accounts','/api/assistant/catalog?kind=lines']){
+  const result=await req(path,200,null,admin);assert.ok(!result.text.includes(testSecret));assert.ok(!result.text.includes(testCodes));
+ }
+ const vaultHistory=(await req('/api/access?history='+account.id,200,null,admin)).text;
+ assert.ok(vaultHistory.includes('assistant'));
+ console.log('PASS: Cofre protegido no assistente, permissões, escopo, token consumido, edição parcial e segredo fora dos cadastros/histórico.');
  const saved=await req('/api/assistant/config',200,config,admin);assert.ok(!saved.text.includes(fakeKey));
  const file=join(directory,'openai-config.json');assert.equal((await stat(file)).mode&0o777,0o600);assert.equal(JSON.parse(await readFile(file,'utf8')).apiKey,fakeKey);
  const status=await req('/api/assistant',200,null,admin);assert.equal(status.data.configured,true);assert.ok(!status.text.includes(fakeKey));
