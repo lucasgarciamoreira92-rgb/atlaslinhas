@@ -2,6 +2,8 @@
 
 ## Aprovação e gravação — 14/09/2026
 
+Validação seletiva no Mac: run 34840412677, quatro cenários aprovados, zero falhas/instáveis/ignorados. Os cenários de rascunho agora também criam e editam linha e aparelho pela interface, conferindo que o banco só muda após Aprovar e salvar. A pendência anterior de seleção/edição no navegador foi coberta nesta rodada. Nenhuma chamada à OpenAI ou uso dos dados reais.
+
 O resumo revisado agora permite `Aprovar e salvar` para linhas/chips e aparelhos. `POST /api/assistant/approve` aceita somente approvalToken e confirmed=true: não aceita dados do cadastro. O servidor mantém a proposta exata por dez minutos, vinculada à sessão. Novo pedido de preparação invalida o anterior, inclusive se incompleto/inválido; reiniciar o servidor invalida revisões. Tokens são consumidos antes da gravação para impedir cliques duplicados. Falhas exigem uma nova proposta; ainda não há recuperação idempotente de uma resposta perdida após gravar.
 
 Gravações reutilizam validações e histórico dos cadastros existentes, preservando observações fora da conversa. Linhas conferem versão da linha e configurações; aparelhos conferem a versão das configurações e o conjunto de linhas/versões na mesma escrita SQL, para que os impactos não mudem entre revisão e confirmação. O histórico existente de aparelhos registra mudanças nas linhas vinculadas; aparelhos sem linhas ainda não têm histórico independente.
