@@ -2,10 +2,10 @@ import {spawnSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const args = process.argv.slice(2);
-const blocks = {'6': 'bloco-6-acessos.spec.ts', '7': 'bloco-7-arquivos.spec.ts', '8': 'bloco-8-interface.spec.ts', regressao: 'regressao.spec.ts', todos: ''};
+const blocks = {'6': 'bloco-6-acessos.spec.ts', '7': 'bloco-7-arquivos.spec.ts', '8': 'bloco-8-interface.spec.ts', regressao: 'regressao.spec.ts', assistente: 'assistant-.*\\.spec\\.ts', todos: ''};
 const block = args.find(a => !a.startsWith('--')) || 'todos';
 if (!(block in blocks) || args.some(a => a.startsWith('--') && !['--headed', '--ui'].includes(a))) {
-  console.error('Uso: node scripts/test-interface.mjs [6|7|8|regressao|todos] [--headed|--ui]');
+  console.error('Uso: node scripts/test-interface.mjs [6|7|8|regressao|assistente|todos] [--headed|--ui]');
   process.exit(1);
 }
 function run(file, params) {

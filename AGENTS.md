@@ -6,7 +6,8 @@
 - Dimensionar a cobertura pelo impacto: mudanças em banco, login, permissões ou backups podem exigir cobertura relacionada mais ampla, explicando o motivo.
 - Ao concluir a aplicação, executar a suíte completa antes da entrega final. Não confundir aprovação parcial de uma feature com validação de toda a aplicação.
 - Prévias no ChatGPT são para avaliação visual; testes de navegador devem seguir o fluxo de código publicado e validação no Mac acordado, com dados temporários.
-- Os acionamentos seletivos do assistente e a seleção de testes no CI ainda precisam ser ajustados; este registro não significa que essa automação já foi alterada. Não usar `todos` por conveniência nas próximas rodadas intermediárias.
+- O bloco `assistente` seleciona somente `assistant-*.spec.ts` no executor privado e em scripts/test-interface.mjs. A seleção de testes no CI integral ainda precisa ser ajustada; usar publicação com `[skip ci]` seguida do bloco específico no Mac durante estes ajustes. Não usar `todos` por conveniência nas rodadas intermediárias.
+
 
 ## Continuidade aprovada pelo usuário (11/09/2026)
 

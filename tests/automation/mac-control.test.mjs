@@ -45,6 +45,7 @@ test('pedidos aceitam somente blocos e SHA fixos, recusando comandos e injeçõe
   assert.deepEqual(testArgs('6'), ['test', 'bloco-6-acessos.spec.ts', '--headed']);
   assert.deepEqual(testArgs('8'), ['test', 'bloco-8-interface.spec.ts', '--headed']);
   assert.deepEqual(testArgs('todos'), ['test', '--headed']);
+  assert.deepEqual(testArgs('assistente'), ['test', 'assistant-.*\\.spec\\.ts', '--headed']);
   assert.throws(() => testArgs('constructor'));
 });
 

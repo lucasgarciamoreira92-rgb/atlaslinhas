@@ -1,5 +1,13 @@
 # Assistente Atlas — integração em construção
 
+## Painel de preparação guiada — 14/09/2026
+
+O modo inicial do assistente agora prepara linhas/chips e aparelhos sem chave OpenAI. É explicitamente guiado: perguntas por campo, opções válidas, busca paginada e seleção explícita para editar, histórico das respostas, correções e resumo antes/depois. Não interpreta linguagem livre como IA. Conversa OpenAI e configuração permanecem em modos separados; dados do rascunho não são enviados ao provedor.
+
+Rascunho em memória do componente: preservado ao fechar/reabrir e trocar de modo; descartado ao recarregar ou sair. Novo rascunho exige confirmação de descarte. Propostas não são salvas; aprovação/gravação continua indisponível. Conflitos mantêm o rascunho e pedem nova consulta, sem atualizar silenciosamente a versão. Próximos passos: confirmação vinculada à proposta e integração real ao final.
+
+Acionamento seletivo `assistente` adicionado ao executor privado e ao comando `node scripts/test-interface.mjs assistente --headed`; seleciona apenas `assistant-*.spec.ts`. Proteções de main, repositório privado e cópia temporária permanecem. CI integral automático ainda requer seleção futura; publicar esta etapa com `[skip ci]` e acionar o bloco específico no Mac.
+
 ## Preparação de propostas — 14/09/2026
 
 `POST /api/assistant/proposals` prepara criação/edição de linhas (incluindo chip/eSIM via slot) e aparelhos. Piloto administrativo, sem chamada à IA. Recebe kind (`line`/`device`), action (`create`/`edit`), settingsVersion e fields parciais; edição exige targetId explícito e expectedVersion. Para aparelhos, a versão é a das configurações.

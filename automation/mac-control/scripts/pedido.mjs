@@ -6,7 +6,7 @@ export const CONTROL = 'lucasgarciamoreira92-rgb/atlaslinhas-validacao-mac';
 export const LABEL = 'atlas-linhas-mac';
 export const BLOCKS = Object.freeze({
   '6': 'bloco-6-acessos.spec.ts', '7': 'bloco-7-arquivos.spec.ts', '8': 'bloco-8-interface.spec.ts',
-  regressao: 'regressao.spec.ts', todos: '',
+  regressao: 'regressao.spec.ts', assistente: 'assistant-.*\\.spec\\.ts', todos: '',
 });
 
 export function validateRequest(value) {
