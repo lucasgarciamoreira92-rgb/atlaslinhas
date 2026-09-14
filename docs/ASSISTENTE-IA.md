@@ -2,6 +2,8 @@
 
 ## Painel de preparação guiada — 14/09/2026
 
+Validação seletiva no Mac concluída no run 34839602375: quatro cenários aprovados, zero falhas/instáveis/ignorados. Cobre configuração, layout em três larguras, rascunho de linha com correção/reabertura e ausência de gravação, aparelho novo e busca vazia. A primeira rodada 34839360980 identificou nomes acessíveis inconsistentes quando a resposta mudava de input para select; corrigidos antes da aprovação. A edição de registro existente tem cobertura de servidor, mas seu fluxo completo de seleção/edição no navegador ainda precisa de cenário próprio. A instalação diária não é atualizada pelo executor.
+
 O modo inicial do assistente agora prepara linhas/chips e aparelhos sem chave OpenAI. É explicitamente guiado: perguntas por campo, opções válidas, busca paginada e seleção explícita para editar, histórico das respostas, correções e resumo antes/depois. Não interpreta linguagem livre como IA. Conversa OpenAI e configuração permanecem em modos separados; dados do rascunho não são enviados ao provedor.
 
 Rascunho em memória do componente: preservado ao fechar/reabrir e trocar de modo; descartado ao recarregar ou sair. Novo rascunho exige confirmação de descarte. Propostas não são salvas; aprovação/gravação continua indisponível. Conflitos mantêm o rascunho e pedem nova consulta, sem atualizar silenciosamente a versão. Próximos passos: confirmação vinculada à proposta e integração real ao final.
