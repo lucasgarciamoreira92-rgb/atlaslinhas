@@ -1,5 +1,13 @@
 # Atlas Linhas — instruções para agentes
 
+## Política de testes aprovada em 14/09/2026
+
+- Durante o desenvolvimento, executar testes direcionados ao que mudou e aos fluxos relacionados que possam ser afetados; não acionar a suíte completa por padrão a cada rodada.
+- Dimensionar a cobertura pelo impacto: mudanças em banco, login, permissões ou backups podem exigir cobertura relacionada mais ampla, explicando o motivo.
+- Ao concluir a aplicação, executar a suíte completa antes da entrega final. Não confundir aprovação parcial de uma feature com validação de toda a aplicação.
+- Prévias no ChatGPT são para avaliação visual; testes de navegador devem seguir o fluxo de código publicado e validação no Mac acordado, com dados temporários.
+- Os acionamentos seletivos do assistente e a seleção de testes no CI ainda precisam ser ajustados; este registro não significa que essa automação já foi alterada. Não usar `todos` por conveniência nas próximas rodadas intermediárias.
+
 ## Continuidade aprovada pelo usuário (11/09/2026)
 
 - Aplicação local no Mac em ~/Projetos/atlaslinhas; repositório lucasgarciamoreira92-rgb/atlaslinhas.
