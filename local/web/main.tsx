@@ -1,6 +1,7 @@
 import {useEffect,useState,type FormEvent} from 'react';
 import {createRoot} from 'react-dom/client';
 import AtlasApp from '../../app/atlas-app';
+import Assistant from './assistant';
 import '../../app/globals.css';
 import './session.css';
 
@@ -10,7 +11,7 @@ function Entry(){
  useEffect(()=>{void status()},[]);
  async function submit(e:FormEvent){e.preventDefault();setError('');if(state==='setup'&&password!==confirm){setError('As senhas não conferem.');return}setBusy(true);try{const r=await fetch('/api/auth/'+state,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,email,password})}),d=await r.json() as {error?:string};if(!r.ok)throw Error(d.error||'Não foi possível entrar.');setPassword('');setConfirm('');setState('app')}catch(e){setError((e as Error).message)}finally{setBusy(false)}}
  async function logout(){const r=await fetch('/api/auth/logout',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'});if(r.ok){setState('login');setError('')}else setError('Não foi possível sair. Tente novamente.')}
- if(state==='app')return <AtlasApp localMode onLogout={()=>void logout()}/>;
+ if(state==='app')return <><AtlasApp localMode onLogout={()=>void logout()}/><Assistant/></>;
  return <main className="local-entry"><section className="local-login"><div className="local-brand"><span>A</span><div><strong>Atlas</strong><small>LINHAS · ON NET</small></div></div>{state==='loading'?<p role="status">Carregando...</p>:state==='error'?<><p role="alert">{error}</p><button onClick={()=>void status()}>Tentar novamente</button></>:<><h1>{state==='setup'?'Vamos organizar suas linhas.':'Bem-vindo de volta.'}</h1><p>{state==='setup'?'Crie seu acesso de administrador para começar.':'Entre com o e-mail e a senha cadastrados nesta aplicação.'}</p><form onSubmit={submit}>{state==='setup'&&<label>Seu nome<input autoComplete="name" required maxLength={200} value={name} onChange={e=>setName(e.target.value)}/></label>}<label>E-mail<input type="email" autoComplete="username" required maxLength={254} value={email} onChange={e=>setEmail(e.target.value)}/></label><label>Senha<input type="password" autoComplete={state==='setup'?'new-password':'current-password'} minLength={state==='setup'?8:1} maxLength={128} required value={password} onChange={e=>setPassword(e.target.value)}/></label>{state==='setup'&&<><small>Use pelo menos 8 caracteres. Pode usar somente números.</small><label>Confirmar senha<input type="password" autoComplete="new-password" required maxLength={128} value={confirm} onChange={e=>setConfirm(e.target.value)}/></label></>}{error&&<p role="alert" className="login-error">{error}</p>}<button disabled={busy} type="submit">{busy?'Aguarde...':state==='setup'?'Criar meu acesso':'Entrar'}</button></form><footer>{state==='setup'?'Tudo pronto para cadastrar as linhas da sua empresa.':'Esqueceu a senha? Peça ao administrador para redefini-la.'}</footer></>}</section></main>
 }
 createRoot(document.getElementById('root')!).render(<Entry/>);

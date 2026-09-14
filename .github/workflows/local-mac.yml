@@ -31,6 +31,8 @@ jobs:
         run: npm run local:test
       - name: Testar verificações, Cofre e migração
         run: npm run test:access
+      - name: Testar configuração privada do assistente
+        run: node scripts/test-assistant-config.mjs
       - name: Instalar navegador de testes
         run: node node_modules/@playwright/test/cli.js install chromium
       - name: Testar interface com dados temporários
