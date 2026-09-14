@@ -1,5 +1,15 @@
 # Assistente Atlas — integração em construção
 
+## Aprovação e gravação — 14/09/2026
+
+O resumo revisado agora permite `Aprovar e salvar` para linhas/chips e aparelhos. `POST /api/assistant/approve` aceita somente approvalToken e confirmed=true: não aceita dados do cadastro. O servidor mantém a proposta exata por dez minutos, vinculada à sessão. Novo pedido de preparação invalida o anterior, inclusive se incompleto/inválido; reiniciar o servidor invalida revisões. Tokens são consumidos antes da gravação para impedir cliques duplicados. Falhas exigem uma nova proposta; ainda não há recuperação idempotente de uma resposta perdida após gravar.
+
+Gravações reutilizam validações e histórico dos cadastros existentes, preservando observações fora da conversa. Linhas conferem versão da linha e configurações; aparelhos conferem a versão das configurações e o conjunto de linhas/versões na mesma escrita SQL, para que os impactos não mudem entre revisão e confirmação. O histórico existente de aparelhos registra mudanças nas linhas vinculadas; aparelhos sem linhas ainda não têm histórico independente.
+
+Após salvar, o painel confirma o resultado; a visão geral deve ser atualizada para carregar os dados. A IA permanece desconectada do fluxo guiado. A atualização anterior que dizia que o botão estava indisponível descreve a etapa histórica, agora substituída por esta.
+
+Testes direcionados de servidor aprovados: uso único, isolamento de sessão, resumo substituído, confirmação obrigatória, rejeição de campos adulterados, criação/edição, preservação de observações e conflitos de linha/configurações/vínculos. Não executar suíte completa nesta etapa; validar somente o bloco assistente no Mac após publicação.
+
 ## Painel de preparação guiada — 14/09/2026
 
 Validação seletiva no Mac concluída no run 34839602375: quatro cenários aprovados, zero falhas/instáveis/ignorados. Cobre configuração, layout em três larguras, rascunho de linha com correção/reabertura e ausência de gravação, aparelho novo e busca vazia. A primeira rodada 34839360980 identificou nomes acessíveis inconsistentes quando a resposta mudava de input para select; corrigidos antes da aprovação. A edição de registro existente tem cobertura de servidor, mas seu fluxo completo de seleção/edição no navegador ainda precisa de cenário próprio. A instalação diária não é atualizada pelo executor.

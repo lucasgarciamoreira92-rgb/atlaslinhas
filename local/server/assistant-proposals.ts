@@ -4,8 +4,9 @@ import {AccessError,requireActor} from '@/lib/access';
 import {config,db} from '@/lib/storage';
 import {lineSchema,deviceSchema,type Line} from '@/lib/atlas';
 import {prepareLine,prepareConfig,checkLineConflicts,deviceSlots} from '@/lib/registration';
+import {beginReview,finishReview} from './assistant-approval';
 
-// Stateless preparation only. A proposal is never an authorization to save.
+// Fields are resubmitted by the UI; only the reviewed payload stays server-side.
 const lineFields=lineSchema.omit({id:true,version:true,updatedAt:true,notes:true}).partial().strict();
 const deviceFields=deviceSchema.omit({id:true}).partial().strict();
 const envelope=z.object({kind:z.enum(['line','device']),action:z.enum(['create','edit']),
@@ -17,6 +18,7 @@ const publicLine=(l:Line)=>{const {notes,updatedAt,...safe}=l;return {...safe,da
 
 export async function assistantProposalPOST(req:Request){
  await requireActor(true);
+ const review=beginReview(req);
  const input=envelope.parse(await req.json());
  const fields=(input.kind==='line'?lineFields:deviceFields).parse(input.fields);
  if(input.action==='create'&&(input.targetId!==undefined||input.expectedVersion!==undefined))throw new AccessError('Um cadastro novo não deve indicar registro ou versão anterior.',400);
@@ -35,17 +37,19 @@ export async function assistantProposalPOST(req:Request){
  if(input.kind==='line'&&combined.deviceId&&combined.status!=='cancelled'&&!combined.slot)missing.push('slot');
  const base={kind:input.kind,action:input.action,targetId:input.targetId??null,settingsVersion:c.version,expectedVersion:input.expectedVersion??null,canSave:false};
  if(missing.length)return Response.json({...base,state:'needs_information',questions:missing.map(field=>({field,question:prompts[field]}))});
- let after:Record<string,unknown>,affectedLineIds:string[]=[];
+ let after:Record<string,unknown>,payload:unknown,affectedLineIds:string[]=[];
  try{
   if(input.kind==='line'){
    const candidate=prepareLine({platform:'',location:'',owner:'',team:'',cost:null,dueDay:null,dataPackage:'',notes:'',slot:null,version:0,...(input.action==='edit'?existing:{}),...fields} as Line,c);
    checkLineConflicts(candidate,lines);
    if(!c.carriers.includes(candidate.carrier))throw Error('Escolha uma operadora cadastrada.');
    after=publicLine(candidate);
+   payload=candidate;
   }else{
    const candidate=deviceSchema.parse(Object.assign({id:input.targetId??randomUUID(),location:'',owner:''},before??{},fields));
    const devices=input.action==='edit'?c.devices.map(d=>d.id===candidate.id?candidate:d):[...c.devices,candidate];
    prepareConfig({...c,devices},lines);
+   payload={...c,devices};
    after={...candidate,slots:deviceSlots(candidate)};
    affectedLineIds=lines.filter(l=>l.deviceId===candidate.id).map(l=>l.id!);
   }
@@ -54,7 +58,8 @@ export async function assistantProposalPOST(req:Request){
  const changes=keys.filter(k=>JSON.stringify((before as Record<string,unknown>|null)?.[k]??null)!==JSON.stringify(after[k]??null))
   .map(field=>({field,before:(before as Record<string,unknown>|null)?.[field]??null,after:after[field]??null}));
  await requireActor(true);
+ const approval=input.action==='edit'&&!changes.length?{}:finishReview(req,review,{kind:input.kind,payload,settingsVersion:c.version,lines:JSON.stringify(lines.map(l=>[l.id,l.version]))});
  return Response.json({...base,state:input.action==='edit'&&!changes.length?'unchanged':'ready_for_review',
-  before,after,changes,affectedLineIds,requiresApproval:true,
-  message:'Revise a proposta. Nenhum cadastro foi salvo; a confirmação de gravação será implementada em uma etapa posterior.'});
+  before,after,changes,affectedLineIds,requiresApproval:true,...approval,
+  message:'Revise o resumo e clique em Aprovar e salvar. Nenhum cadastro foi salvo ainda.'});
 }

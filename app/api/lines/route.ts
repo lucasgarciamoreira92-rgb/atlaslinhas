@@ -4,10 +4,12 @@ import {db,config,failure,mutationGuard} from '@/lib/storage';
 import {type Line} from '@/lib/atlas';
 import {prepareLine,sameLine} from '@/lib/registration';
 export async function GET(){try{await requireActor();const rows=await db().prepare('SELECT id,data,version,updated_at FROM lines ORDER BY updated_at DESC').all<{id:string,data:string,version:number,updated_at:string}>();return Response.json({lines:rows.results.map(x=>({...JSON.parse(x.data),id:x.id,version:x.version,updatedAt:x.updated_at}))},{headers:{'Cache-Control':'no-store'}})}catch(e){return failure(e)}}
-export async function POST(req:Request){
+export async function POST(req:Request){return saveLine(req);}
+export async function saveLine(req:Request,expectedSettingsVersion?:number){
  const guard=mutationGuard(req);if(guard)return guard;
  try{
-  const actor=await requireActor(),c=await config();let d:Line;
+  const actor=await requireActor(expectedSettingsVersion!==undefined),c=await config();let d:Line;
+  if(expectedSettingsVersion!==undefined&&c.version!==expectedSettingsVersion)return Response.json({error:'Os aparelhos mudaram. Prepare e revise uma nova proposta.'},{status:409});
   try{d=prepareLine(await req.json(),c)}catch(e){return Response.json({error:(e as Error).message},{status:400})}
   const id=d.id||crypto.randomUUID(),stamp=new Date().toISOString();
   const exists=await db().prepare('SELECT data,version FROM lines WHERE id=?').bind(id).first<{data:string,version:number}>();
