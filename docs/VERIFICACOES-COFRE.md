@@ -4,7 +4,7 @@ Versão inicial para uso e refinamento. Não recebe SMS/e-mails, não gera TOTP 
 
 ## Atualizar no Mac
 
-Projeto: `~/Projetos/atlaslinhas`. Dados: `~/AtlasLinhas/dados`, salvo configuração explícita de `ATLAS_DATA_DIR`.
+Projeto: `~/Projetos/atlaslinhas`. Instalações novas usam `~/AtlasLinhas/dados`. Quando existe um banco anterior em `~/Projetos/atlaslinhas/dados`, o inicializador o reconhece e preserva automaticamente. Uma configuração explícita de `ATLAS_DATA_DIR` continua tendo prioridade.
 
 Pare a aplicação no Terminal com Control+C antes de atualizar. Dentro do projeto:
 

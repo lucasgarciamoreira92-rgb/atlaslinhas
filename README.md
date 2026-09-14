@@ -34,7 +34,7 @@ O caminho acima pressupõe que o repositório foi clonado na sua pasta pessoal. 
 
 ## Onde ficam os dados
 
-Pasta padrão: **`~/AtlasLinhas/dados/`**, separada do código e excluída do Git.
+Pasta padrão para instalações novas: **`~/AtlasLinhas/dados/`**, separada do código e excluída do Git. Se o inicializador encontrar um banco de uma instalação anterior em **`dados/` dentro do projeto**, ele preserva e usa esse banco automaticamente. O Terminal sempre informa o caminho escolhido ao iniciar.
 
 | Item | Conteúdo |
 |---|---|
@@ -43,7 +43,7 @@ Pasta padrão: **`~/AtlasLinhas/dados/`**, separada do código e excluída do Gi
 | `backups/` | Cópias manuais e automáticas anteriores às recuperações |
 | `backup.key` | Chave local que valida a assinatura dos backups; deve ser preservada |
 
-A pasta é criada no primeiro início. Atualizar ou apagar uma cópia do código não altera essa pasta. Para mudar sua localização, defina `ATLAS_DATA_DIR` antes de iniciar; use o mesmo caminho nos próximos inícios. `ATLAS_PORT` altera a porta (padrão 4310). Não coloque o banco ativo dentro de pasta de sincronização em nuvem.
+A pasta é criada no primeiro início. Atualizar uma cópia do código não altera essa pasta. Para escolher outra localização explicitamente, defina `ATLAS_DATA_DIR` antes de iniciar; use o mesmo caminho nos próximos inícios. `ATLAS_PORT` altera a porta (padrão 4310). Não coloque o banco ativo dentro de pasta de sincronização em nuvem.
 
 O backup JSON da tela contém linhas, aparelhos, configurações e histórico, **sem os logins da equipe do Atlas** (contas de serviços e credenciais criptografadas são incluídas na versão nova). Para uma cópia completa de toda a instalação, pare o aplicativo e copie a pasta `dados` inteira, incluindo `backup.key`. Uma cópia na mesma máquina não protege contra a perda do Mac: guarde a cópia completa também em outro local de sua escolha.
 

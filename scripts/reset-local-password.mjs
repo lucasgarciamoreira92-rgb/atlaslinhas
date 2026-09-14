@@ -17,7 +17,8 @@ try{
  process.stdout.write('Nova senha (mínimo 8 caracteres, entrada oculta): ');hidden=true;const password=await rl.question('');hidden=false;process.stdout.write('\n');
  process.stdout.write('Repita a senha: ');hidden=true;const confirm=await rl.question('');hidden=false;process.stdout.write('\n');
  if(password.length<8||password.length>128||password!==confirm)throw Error('Senhas diferentes ou tamanho inválido.');
- const directory=resolve(process.env.ATLAS_DATA_DIR||join(homedir(),'AtlasLinhas','dados'));
+ const projectDirectory=join(resolve('.'),'dados');
+ const directory=resolve(process.env.ATLAS_DATA_DIR||(existsSync(join(projectDirectory,'atlas-linhas.sqlite'))?projectDirectory:join(homedir(),'AtlasLinhas','dados')));
  if(!existsSync(join(directory,'atlas-linhas.sqlite')))throw Error('Banco local não encontrado. Confira ATLAS_DATA_DIR.');
  db=new DatabaseSync(join(directory,'atlas-linhas.sqlite'),{open:true});db.exec('PRAGMA foreign_keys=ON;PRAGMA busy_timeout=5000;');
  const user=db.prepare('SELECT user_id FROM members WHERE email=? AND active=1').get(email);if(!user)throw Error('Usuário ativo não encontrado.');

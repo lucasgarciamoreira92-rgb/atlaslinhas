@@ -27,7 +27,7 @@
 
 ## Dados e escopo
 
-- Dados reais em ~/AtlasLinhas/dados. Nunca usar essa pasta em testes, copiar seus conteúdos para o projeto, enviá-los ao GitHub, resetar suas credenciais ou restaurar backups nela por iniciativa do agente.
+- No Mac de Lucas, a base real recuperada está em `~/Projetos/atlaslinhas/dados`; instalações novas usam `~/AtlasLinhas/dados`. O inicializador prioriza o banco existente dentro do projeto e informa o caminho no Terminal. Nunca usar nenhuma dessas pastas em testes, copiar ou enviar seus conteúdos ao GitHub, resetar credenciais ou restaurar backups por iniciativa do agente.
 - Preserve migrações aplicadas, assinatura dos backups, histórico, validação de slots e conflitos de versão.
 - Primeiro eSIM persiste como "eSIM" e é exibido como "eSIM 1". Os adicionais persistem como "eSIM 2", etc.
 - Senha mínima de 8 caracteres, permitindo somente números, conforme decisão do usuário.
