@@ -21,3 +21,13 @@ O transporte está ligado à rota autenticada `/api/assistant` e a um painel de 
 7. Testes automáticos dos fluxos reais, instalação e revisão de uso no Mac.
 
 Referência: https://developers.openai.com/api/docs/guides/structured-outputs
+
+## Publicação e validação — 14/09/2026 UTC
+
+- Piloto publicado pelo PR #2, merge `31b67fbb1c40b00c00be3a78823cb2339928515e`.
+- macOS do GitHub: run 34798907820 aprovado; TypeScript, automação, HTTP/SQLite, Cofre/migração, configuração privada e 18 cenários de interface.
+- Mac de Lucas: run 34799157222, mesmo merge, 18 aprovados, zero falhas, instáveis ou ignorados. Interface executada de 02:26:13 a 02:28:19 UTC (13/09, 23:26–23:28 em Brasília). Configuração privada da IA incluída com chave fictícia, sem chamada externa.
+- A pendência de interface da configuração mencionada acima está concluída. Continua pendente testar uma conversa real após configuração privada de chave/modelo; consultas, propostas e gravações aprovadas ainda não foram implementadas.
+- Os testes usam cópia isolada e banco temporário. Não atualizam a instalação diária nem usam seus cadastros reais.
+- Decisão do usuário: prévias aqui servem à avaliação visual; validações de navegador ocorrem após publicação, pelo fluxo macOS/Mac configurado.
+- Resultado: https://github.com/lucasgarciamoreira92-rgb/atlaslinhas-validacao-mac/actions/runs/34799157222
