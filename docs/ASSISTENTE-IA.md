@@ -1,5 +1,19 @@
 # Assistente Atlas — integração em construção
 
+## Etapa 7 — Cofre protegido no assistente (14/09/2026)
+
+Implementado na main em `7f1459ff48b8c8226b154bbc95214b83128a21ec`. O modo **Cofre protegido** permite buscar/selecionar uma conta já aprovada e cadastrar/alterar senha e códigos de recuperação após desbloqueio. Usa o mesmo componente e serviço do Cofre, com escopo próprio `assistant`. A gravação ocorre somente ao clicar em **Salvar credencial**; campos vazios preservam o valor existente. O piloto do assistente continua administrativo.
+
+Credenciais com consulta rápida desativada não podem ser reveladas/copiadas pelo assistente; a edição exige a permissão própria. Desbloqueios são vinculados à sessão, conta, versões, finalidade, escopo e expiração. O servidor revalida permissões em cada ação. Fechar o painel, trocar de modo, selecionar outra conta ou sair da janela limpa os campos/desbloqueio locais. Uma gravação já enviada pode concluir mesmo que o painel seja fechado.
+
+Campos protegidos seguem exclusivamente para /api/vault, fora das mensagens e do contexto OpenAI; o histórico registra a operação e o escopo, nunca o conteúdo. Não houve migração ou mudança da pasta de dados. A integração em linguagem livre continua para a etapa 8.
+
+Validação direcionada de desenvolvimento aprovada: TypeScript, compilação, testes HTTP/SQLite do assistente e serviço Cofre/migração. Cobertura nova: bloqueio do operador, escopo incompatível, token invalidado após escrita, preservação dos códigos em edição parcial e ausência de segredos nos catálogos/histórico. A suíte integral não foi executada.
+
+**Interface pendente:** run [34844187032](https://github.com/lucasgarciamoreira92-rgb/atlaslinhas-validacao-mac/actions/runs/34844187032), fonte exata acima. Preparação aprovada; tarefa do Mac em fila na última consulta. Seis cenários do bloco assistente previstos, incluindo cadastro/edição no Cofre, ausência de gravação antes do clique, limpeza ao fechar/trocar de modo/perder foco e larguras 1280/768/390. Conferir esse pedido antes de criar outro; não marcar etapa 7 integralmente validada enquanto estiver em fila.
+
+A automação usa cópia isolada e dados fictícios; não atualiza a instalação diária.
+
 ## Verificações no assistente — 14/09/2026
 
 Novo modo Verificações no painel guiado: consulta de contas, criação/edição de metadados, responsável existente, situação 2FA, múltiplos métodos/destinos, finalidade, etapa, preferência, situação e responsável de cada destino. SMS/ligação reutilizam linhas; autenticador/aprovação reutilizam aparelhos; e-mail seleciona outra caixa cadastrada. Chaves físicas, recuperação e outros registram apenas localização/identificação, nunca o código. Pessoas novas continuam sendo cadastradas na área existente. Métodos não ativam 2FA automaticamente.
