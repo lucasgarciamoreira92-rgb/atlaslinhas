@@ -17,7 +17,7 @@ export default function AssistantVault(){
   {error&&<p role="alert">{error}</p>}
   {loading?<p role="status">Consultando contas…</p>:<>
    <label className="access-field"><span>Buscar conta para o Cofre</span><input value={query} onChange={e=>{setQuery(e.target.value);setSelected('')}} autoComplete="off"/></label>
-   <label className="access-field"><span>Conta do Cofre</span><select value={selected} onChange={e=>setSelected(e.target.value)}><option value="">Selecione uma conta</option>{accounts.filter(a=>!a.archived&&(!query||[a.label,a.login,a.service].join(' ').toLocaleLowerCase().includes(query.toLocaleLowerCase()))).map(a=><option key={a.id} value={a.id}>{a.label} · {a.login}</option>)}</select></label>
+   <label className="access-field"><span>Conta do Cofre</span><select aria-label="Conta do Cofre" value={selected} onChange={e=>setSelected(e.target.value)}><option value="">Selecione uma conta</option>{accounts.filter(a=>!a.archived&&(!query||[a.label,a.login,a.service].join(' ').toLocaleLowerCase().includes(query.toLocaleLowerCase()))).map(a=><option key={a.id} value={a.id}>{a.label} · {a.login}</option>)}</select></label>
    {!accounts.length&&<p>Cadastre e aprove uma conta na aba Verificações para adicionar sua credencial.</p>}
    {active&&<CredentialPanel key={active.id+'-'+active.version} account={active} scope="assistant" onVault={()=>setError('Abra a seção Cofre no menu principal para consultar esta credencial.')} onSaved={()=>refresh()}/>}
   </>}
