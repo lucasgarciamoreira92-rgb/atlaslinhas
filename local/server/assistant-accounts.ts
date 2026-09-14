@@ -6,7 +6,7 @@ import {sqlite} from './environment';
 import {beginReview,finishReview} from './assistant-approval';
 const rows=()=>sqlite.prepare('SELECT id,data,version FROM access_accounts ORDER BY id').all().map(r=>({id:String(r.id),version:Number(r.version),data:JSON.parse(String(r.data)) as AccountData}));
 const revision=()=>Number(sqlite.prepare("SELECT revision FROM storage_revision WHERE id='main'").get()?.revision??0);
-const fieldsSchema=accountDataSchema.omit({checkedAt:true,checkedBy:true}).partial().strict();
+const fieldsSchema=accountDataSchema.omit({checkedAt:true,checkedBy:true}).partial().extend({service:z.string().trim().max(200).optional(),label:z.string().trim().max(200).optional(),login:z.string().trim().max(200).optional()}).strict();
 export async function assistantAccountsGET(){
  await requireActor(true);const current=inventory();
  return Response.json({revision:revision(),accounts:rows().map(r=>({id:r.id,version:r.version,...r.data})),people:people(),

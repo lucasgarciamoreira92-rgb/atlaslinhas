@@ -106,6 +106,7 @@ try{
  await req('/api/assistant/accounts',400,{...accountDraft,fields:{...accountDraft.fields,policy:{visibility:'team'}}},admin);
  const missingAccount=(await req('/api/assistant/accounts',200,{...accountDraft,fields:{}},admin)).data;
  assert.equal(missingAccount.state,'needs_information');assert.equal(missingAccount.questions.length,3);
+ assert.equal((await req('/api/assistant/accounts',200,{...accountDraft,fields:{service:'',label:'',login:''}},admin)).data.questions.length,3);
  const accountProposal=(await req('/api/assistant/accounts',200,accountDraft,admin)).data;
  assert.equal(accountProposal.state,'ready_for_review');assert.equal((await req('/api/assistant/accounts',200,null,admin)).data.accounts.length,0);
  const accountSaved=(await approve(accountProposal.approvalToken)).data;
