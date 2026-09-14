@@ -15,7 +15,10 @@ export async function requestAssistant(messages:AssistantMessage[],transport:typ
   body:JSON.stringify({model,store:false,max_output_tokens:1500,
    instructions:'Você é o assistente do Atlas Linhas. Responda em português. Ajude com linhas, chips, aparelhos, verificações e contas. Pergunte o que falta, não invente cadastros. Nesta fase você não possui ferramentas nem acesso ao banco: nunca afirme que consultou ou salvou dados. Toda criação ou edição futura exigirá resumo e aprovação. Nunca peça senhas no chat; oriente usar o campo protegido do Cofre. Para assuntos externos, explique brevemente seu escopo.',input:messages})
  });}catch{throw new Error('Não foi possível conectar à OpenAI. Tente novamente.');}
- if(!response.ok)throw new Error(response.status===401?'A chave da OpenAI foi recusada.':response.status===429?'A OpenAI informou limite de uso. Confira a conta da API.':'A OpenAI não concluiu a solicitação.');
+ if(!response.ok){
+  let code='';try{const d=await response.json() as {error?:{code?:string}};code=d.error?.code||''}catch{/* Never surface a raw provider response. */}
+  throw new Error(response.status===401?'A chave da OpenAI foi recusada. Crie uma chave válida ou substitua a chave salva.':response.status===403?'A chave não tem permissão para usar este modelo ou a API. Confira o projeto e as permissões na OpenAI.':response.status===404?'Modelo não encontrado ou indisponível para sua conta. Confira o identificador do modelo.':response.status===429?(code==='insufficient_quota'?'A OpenAI informou saldo ou cota insuficiente. Confira a cobrança e os limites da conta da API.':'A OpenAI informou limite de uso. Aguarde um momento e confira os limites da conta da API.'):response.status===400?'A OpenAI recusou a configuração. Confira se o modelo escolhido aceita respostas de texto pela API.':'A OpenAI não concluiu a solicitação. Tente novamente em alguns instantes.');
+ }
  let data:{status?:string;output?:Array<{type?:string;content?:Array<{type?:string;text?:string}>}>};
  try{data=await response.json();}catch{throw new Error('Resposta inválida da OpenAI.');}
  if(data.status!=='completed')throw new Error('A resposta ficou incompleta. Tente novamente.');

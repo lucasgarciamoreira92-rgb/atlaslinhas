@@ -1,0 +1,25 @@
+.atlas-assistant .assistant-setup{display:grid;gap:16px;padding-top:6px;min-width:0;font-size:14px;line-height:1.55}
+.atlas-assistant .assistant-setup h3{font-size:21px;line-height:1.25;letter-spacing:-.4px;margin:0;color:#294436}
+.atlas-assistant .assistant-setup h3:focus{outline:none}
+.atlas-assistant .setup-progress{display:flex;gap:8px;list-style:none;padding:0;margin:0}
+.atlas-assistant .setup-progress li{display:flex;align-items:center;gap:6px;flex:1;min-width:0;font-size:12px;color:#697760;padding-bottom:10px;border-bottom:2px solid #e7ecdf}
+.atlas-assistant .setup-progress li span{display:grid;place-items:center;width:23px;height:23px;flex-shrink:0;border-radius:50%;background:#edf1e7}
+.atlas-assistant .setup-progress li[aria-current]{color:#294436;border-color:#7d9769;font-weight:600}
+.atlas-assistant .setup-progress li[aria-current] span{background:#425f43;color:white}
+.atlas-assistant .setup-content{display:grid;gap:16px;min-width:0}
+.atlas-assistant .assistant-setup p{margin:0}
+.atlas-assistant .assistant-setup a{display:inline-flex;align-items:center;gap:6px;color:#365b41;text-decoration:underline;text-underline-offset:3px;font-size:13px;width:fit-content;max-width:100%;overflow-wrap:anywhere}
+.atlas-assistant .assistant-setup a svg{flex-shrink:0}
+.atlas-assistant .setup-note{padding:15px;border-radius:16px;background:#f1f4eb;border:1px solid #d9e1ce;display:grid;gap:8px;overflow-wrap:anywhere}
+.atlas-assistant .setup-instructions{display:grid;gap:17px;padding-left:22px;margin:0}
+.atlas-assistant .setup-instructions li::marker{color:#73885c;font-weight:600}
+.atlas-assistant .setup-instructions p{margin:4px 0 7px}
+.atlas-assistant .assistant-setup .assistant-config{margin-top:0;gap:15px}
+.atlas-assistant .assistant-setup small{font-size:12px;font-weight:400;line-height:1.5;color:#65725c}
+.atlas-assistant .assistant-setup button.setup-primary{display:flex;align-items:center;justify-content:center;gap:8px;background:#365840;color:#fff;min-height:46px;width:100%;margin:0;border-color:#365840;font:inherit;font-weight:500}
+.atlas-assistant .assistant-setup button.setup-secondary{background:transparent;color:#365840;width:auto;min-height:44px;padding:8px 11px;margin:0;border-color:#cfdbc5;font-size:13px}
+.atlas-assistant .setup-model-links,.atlas-assistant .setup-actions{display:flex;align-items:center;flex-wrap:wrap;gap:10px}
+.atlas-assistant .setup-caption{font-size:12px;color:#65725c}
+.atlas-assistant .setup-error{display:grid;gap:8px;border-left:3px solid #a6674d;padding:4px 0 4px 12px;color:#7b412b}
+.atlas-assistant .setup-success{background:#edf5e9;border-color:#b8cda8}
+.atlas-assistant .assistant-setup button:disabled{opacity:.55;cursor:default}

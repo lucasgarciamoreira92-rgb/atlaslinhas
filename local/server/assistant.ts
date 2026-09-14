@@ -6,6 +6,17 @@ import {readAssistantConfig} from './assistant-config';
 setAssistantConfiguration(readAssistantConfig);
 const limits=new Map<string,{at:number;count:number;busy:boolean}>();
 export async function assistantGET(){await requireActor(true);return Response.json(assistantConnectionStatus());}
+export async function assistantTestPOST(req:Request){
+ await requireActor(true);
+ z.object({confirmed:z.literal(true)}).strict().parse(await req.json());
+ const before=readAssistantConfig();
+ // A fixed harmless message; no catalogue, tools, conversation history or user input.
+ const testRequest=new Request(req.url,{method:'POST',headers:req.headers,body:JSON.stringify({messages:[{role:'user',content:'Teste de conexão do Atlas Linhas. Responda apenas: conexão confirmada.'}]})});
+ await assistantPOST(testRequest);
+ const after=readAssistantConfig();
+ if(before.apiKey!==after.apiKey||before.model!==after.model)throw new AccessError('A configuração mudou durante o teste. Teste novamente a configuração atual.',409);
+ return Response.json({tested:true,model:before.model,checkedAt:new Date().toISOString()});
+}
 export async function assistantPOST(req:Request){
  const actor=await requireActor(true);
  if(!assistantConnectionStatus().configured)throw new AccessError('A conexão OpenAI ainda precisa ser configurada no servidor.',503);

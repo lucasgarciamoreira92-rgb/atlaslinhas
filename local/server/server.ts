@@ -6,7 +6,7 @@ import {identityContext} from './identity';
 import {authStatus,authAction,sessionIdentity,teamPost,errorResponse} from './auth';
 import {accessGET,accessPOST} from './access-service';
 import {vaultPOST} from './vault';
-import {assistantGET,assistantPOST} from './assistant';
+import {assistantGET,assistantPOST,assistantTestPOST} from './assistant';
 import {conversationPOST} from './assistant-conversation';
 import {configureAssistant} from './assistant-config';
 import {assistantCatalogGET} from './assistant-catalog';
@@ -28,6 +28,7 @@ const port=Number(process.env.ATLAS_PORT||4310);if(!Number.isInteger(port)||port
 routes['/api/assistant']={GET:assistantGET,POST:assistantPOST};
 routes['/api/assistant/conversation']={POST:conversationPOST};
 routes['/api/assistant/config']={POST:configureAssistant};
+routes['/api/assistant/test']={POST:assistantTestPOST};
 routes['/api/assistant/catalog']={GET:assistantCatalogGET};
 routes['/api/assistant/proposals']={POST:assistantProposalPOST};
 routes['/api/assistant/approve']={POST:assistantApprovePOST};

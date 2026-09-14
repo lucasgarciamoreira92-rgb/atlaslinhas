@@ -15,7 +15,10 @@ export async function configureAssistant(req:Request){
  await requireActor(true);
  const input=z.object({apiKey:z.string().max(512),model:z.string().max(100),password:z.string().max(128)}).strict().parse(await req.json());
  await verifySessionPassword(req,input.password);await requireActor(true);
- const config=schema.parse({apiKey:input.apiKey,model:input.model});
+ const apiKey=input.apiKey.trim()||readAssistantConfig().apiKey;
+ if(apiKey.length<20)throw new AccessError('Cole a chave da API criada na OpenAI. Ela deve ter pelo menos 20 caracteres.',400);
+ if(!/^[a-zA-Z0-9._:-]{1,100}$/.test(input.model.trim()))throw new AccessError('Confira o identificador do modelo. Use o nome indicado pela OpenAI, sem espaços.',400);
+ const config=schema.parse({apiKey,model:input.model});
  const temp=file+'.'+randomUUID()+'.tmp';
  try{writeFileSync(temp,JSON.stringify(config),{flag:'wx',mode:0o600});renameSync(temp,file);}catch{if(existsSync(temp))unlinkSync(temp);throw new AccessError('Não foi possível salvar a configuração local.',500);}
  return Response.json({configured:true,model:config.model});

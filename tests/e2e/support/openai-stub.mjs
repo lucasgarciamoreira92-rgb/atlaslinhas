@@ -6,6 +6,12 @@ const call=(name,payload)=>new Response(JSON.stringify({status:'completed',outpu
 globalThis.fetch=async(url,options)=>{
  if(String(url)!=='https://api.openai.com/v1/responses')return original(url,options);
  const body=JSON.parse(options.body),input=body.input;
+ if(!body.tools&&input.length===1&&input[0].content==='Teste de conexão do Atlas Linhas. Responda apenas: conexão confirmada.'){
+  if(body.store!==false||Object.keys(body).some(k=>['previous_response_id','conversation'].includes(k)))throw Error('Teste deve ser isolado.');
+  const errors={'teste-chave-invalida':[401,'invalid_api_key'],'teste-modelo-ausente':[404,'model_not_found'],'teste-sem-saldo':[429,'insufficient_quota']};
+  if(errors[body.model]){const [status,code]=errors[body.model];return new Response(JSON.stringify({error:{code,message:'SEGREDO_DO_PROVEDOR'}}),{status})}
+  return message('conexão confirmada');
+ }
  if(!body.tools)throw Error('A conversa de teste deve usar ferramentas.');
  if(body.tools.some(t=>/approve|save|write|vault_read/.test(t.name)))throw Error('Ferramenta de gravação indevida.');
  const user=input.filter(i=>i.role==='user').at(-1)?.content??'';

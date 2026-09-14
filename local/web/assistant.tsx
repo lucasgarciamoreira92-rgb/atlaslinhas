@@ -10,9 +10,9 @@ import './assistant.css';
 import './assistant-mascot.css';
 export default function Assistant(){
  const [mode,setMode]=useState<'draft'|'accounts'|'vault'|'chat'|'config'>('draft');
- const [open,setOpen]=useState(false),[allowed,setAllowed]=useState(false),[configured,setConfigured]=useState(false);
+ const [open,setOpen]=useState(false),[allowed,setAllowed]=useState(false),[configured,setConfigured]=useState(false),[configuredModel,setConfiguredModel]=useState('');
  const rootRef=useRef<HTMLElement>(null),panelRef=useRef<HTMLElement>(null);
- useEffect(()=>{const c=new AbortController();fetch('/api/assistant',{signal:c.signal}).then(async r=>{if(!r.ok)return;const d=await r.json() as {configured:boolean};setAllowed(true);setConfigured(d.configured);if(d.configured)setMode('chat');}).catch(()=>{});return()=>c.abort()},[]);
+ useEffect(()=>{const c=new AbortController();fetch('/api/assistant',{signal:c.signal}).then(async r=>{if(!r.ok)return;const d=await r.json() as {configured:boolean;model:string};setAllowed(true);setConfigured(d.configured);setConfiguredModel(d.model);if(d.configured)setMode('chat');}).catch(()=>{});return()=>c.abort()},[]);
  useEffect(()=>{if(!open)return;const frame=requestAnimationFrame(()=>{const target=mode==='chat'?panelRef.current?.querySelector<HTMLTextAreaElement>('textarea'):panelRef.current?.querySelector<HTMLButtonElement>('.assistant-close');target?.focus()});return()=>cancelAnimationFrame(frame)},[open]);
  function close(){setOpen(false);requestAnimationFrame(()=>rootRef.current?.querySelector<HTMLButtonElement>('.assistant-launch')?.focus())}
  if(!allowed)return null;
@@ -24,7 +24,7 @@ export default function Assistant(){
    <div hidden={mode!=='draft'}><AssistantDraft/></div>
    <div hidden={mode!=='accounts'}><AssistantAccounts/></div>
    {open&&mode==='vault'&&<AssistantVault/>}
-   {mode==='config'&&<AssistantConfig onSaved={()=>{setConfigured(true);setMode('chat');}}/>}
+   {open&&mode==='config'&&<AssistantConfig configured={configured} currentModel={configuredModel} onSaved={model=>{setConfigured(true);setConfiguredModel(model)}} onChat={()=>setMode('chat')}/>}
    {mode==='chat'&&<AssistantConversation onVault={()=>setMode('vault')}/>}
   </section>
  </aside>;
