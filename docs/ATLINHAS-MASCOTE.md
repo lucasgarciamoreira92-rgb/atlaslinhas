@@ -33,3 +33,11 @@ A fonte acima foi compilada e executada na cópia temporária de testes do Mac. 
 ## Retorno
 
 Versão anterior na main: `30950d653ae6befaeb3d218fd68f325536a17614`. A mudança é de interface e não adiciona migração; pode ser revertida por commit e nova compilação, mantendo a pasta de dados.
+
+## Ajuste do vínculo do balão e novos gestos — 14/09/2026
+
+O desenho SVG agora fica em um componente memoizado para que mudanças nos cards não substituam seus elementos articulados. O cálculo do rabinho busca a âncora atual do rosto e converte as coordenadas pela matriz do próprio balão, evitando usar uma referência de desenho antigo. A ponta permanece fora da silhueta da cabeça.
+
+Foram adicionados balanço alternado dos braços e inclinação leve da cabeça (até três graus), com pausas. Também há uma sequência discreta enquanto o painel está aberto, mantendo a pose frontal. Hover/aceno, redução de movimento e pausa quando a página está oculta permanecem.
+
+O teste do mascote agora mede a distância entre a ponta e a âncora do personagem após alternar cards, abrir consultas e avançar no tutorial; também verifica os novos gestos e o modo de movimento reduzido. TypeScript e compilação local aprovados; validação no Mac solicitada após a publicação.

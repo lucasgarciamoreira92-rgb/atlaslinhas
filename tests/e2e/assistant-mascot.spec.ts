@@ -5,6 +5,16 @@ import type {Page} from '@playwright/test';
 async function expectTailOutsideFace(page:Page){
  const tail=page.locator('.atlas-assistant .speech-tail');
  await expect(tail).toHaveAttribute('d',/^M /);
+ // A ponta deve seguir o personagem atual, inclusive após renderizar outro card.
+ await expect.poll(()=>page.locator('.atlas-assistant').evaluate(root=>{
+  const curve=root.querySelector<SVGPathElement>('.speech-tail')!,anchor=root.querySelector<SVGCircleElement>('.face-anchor')!;
+  const numbers=(curve.getAttribute('d')||'').match(/-?\d+(?:\.\d+)?(?:e[+-]?\d+)?/gi)?.map(Number);
+  const cm=curve.getScreenCTM(),am=anchor.getScreenCTM();
+  if(!numbers||numbers.length<8||!cm||!am)return 99999;
+  const tip=new DOMPoint(numbers[6],numbers[7]).matrixTransform(cm);
+  const target=new DOMPoint(anchor.cx.baseVal.value,anchor.cy.baseVal.value).matrixTransform(am);
+  return Math.hypot(tip.x-target.x,tip.y-target.y);
+ })).toBeLessThan(2);
  // Compara a curva desenhada com a silhueta real da cabeça, já transformada.
  await expect.poll(async()=>page.locator('.atlas-assistant').evaluate(root=>{
   const curve=root.querySelector<SVGPathElement>('.speech-tail')!;
@@ -46,6 +56,33 @@ test('Atlinhas: poses alternadas, aceno e balões sem cobrir o rosto',async({pag
  await info.attach('atlinhas-conversa',{body:await page.screenshot(),contentType:'image/png'});
  await page.getByRole('button',{name:'Fechar assistente',exact:true}).click();
  await expect(panel).toBeHidden();await expect(launch).toBeFocused();
+});
+
+test('Atlinhas: rabinho acompanha cliques nos cards e novos gestos durante a conversa',async({page},info)=>{
+ await setup(page);
+ await page.getByRole('button',{name:'Abrir assistente Atlinhas',exact:true}).click();
+ const root=page.locator('.atlas-assistant');
+ for(const name of ['Verificações','Cofre protegido','Preparar cadastro','Configurar OpenAI','Verificações']){
+  await root.getByRole('button',{name,exact:true}).click();
+  await expectTailOutsideFace(page);
+ }
+ await root.getByRole('button',{name:'Consultar contas e vínculos',exact:true}).click();
+ await expectTailOutsideFace(page);
+ await page.mouse.move(0,0);
+ await expect(root).toHaveClass(/gesture-soft-head/,{timeout:18000});
+ await expect(root.locator('.head-pivot')).toHaveCSS('animation-name','atl-soft-head');
+ await expect(root.locator('.head-front')).toHaveCSS('opacity','1');
+ await expectTailOutsideFace(page);
+ await expect(root).toHaveClass(/gesture-sway-arms/,{timeout:10000});
+ await expect(root.locator('.shoulder-left')).toHaveCSS('animation-name','atl-sway-left');
+ await expect(root.locator('.shoulder-right')).toHaveCSS('animation-name','atl-sway-right');
+ await expectTailOutsideFace(page);
+ await info.attach('atlinhas-card-e-gestos',{body:await page.screenshot(),contentType:'image/png'});
+ await page.emulateMedia({reducedMotion:'reduce'});
+ await expect(root.locator('.head-pivot')).toHaveCSS('animation-name','none');
+ await root.getByRole('button',{name:'Configurar OpenAI',exact:true}).click();
+ await root.getByRole('button',{name:'Já tenho a chave · continuar',exact:true}).click();
+ await expectTailOutsideFace(page);
 });
 
 test('Atlinhas: navegação por teclado, tamanhos de tela e movimento reduzido',async({page},info)=>{

@@ -1,8 +1,10 @@
-import {useEffect,useRef,type RefObject} from 'react';
+import {memo,useEffect,useRef,type RefObject} from 'react';
 import mascotArt from './atlinhas-art.svg?raw';
 
 type Props={open:boolean;onToggle:()=>void;rootRef:RefObject<HTMLElement|null>;panelRef:RefObject<HTMLElement|null>};
-const gestures=['gesture-curious','gesture-nod','gesture-settle','gesture-scan','double-blink'];
+// Keep React updates in the panel from replacing the articulated SVG nodes.
+const MascotArt=memo(function MascotArt(){return <span className="mascot-art" aria-hidden="true" dangerouslySetInnerHTML={{__html:mascotArt}}/>});
+const gestures=['gesture-curious','gesture-nod','gesture-settle','gesture-scan','gesture-sway-arms','gesture-soft-head','double-blink'];
 const sequence=[
  {front:false,gesture:'gesture-curious',duration:4600},
  {front:true,gesture:'wave',duration:5800},
@@ -10,9 +12,14 @@ const sequence=[
  {front:true,gesture:'double-blink',duration:5600},
  {front:false,gesture:'gesture-scan',duration:6200},
  {front:true,gesture:'gesture-nod',duration:6000},
- {front:false,gesture:null,duration:7400},
+ {front:false,gesture:'gesture-sway-arms',duration:5200},
  {front:true,gesture:'wave',duration:5600},
- {front:false,gesture:null,duration:6600},
+ {front:false,gesture:'gesture-soft-head',duration:5000},
+];
+const openSequence=[
+ {front:true,gesture:'gesture-soft-head',duration:4600},
+ {front:true,gesture:'gesture-sway-arms',duration:4800},
+ {front:true,gesture:'double-blink',duration:4200},
 ];
 
 export default function AssistantMascot({open,onToggle,rootRef,panelRef}:Props){
@@ -23,7 +30,6 @@ export default function AssistantMascot({open,onToggle,rootRef,panelRef}:Props){
   const hello=root.querySelector<HTMLElement>('.mascot-hello')!;
   const link=root.querySelector<SVGSVGElement>('.speech-link')!;
   const tail=root.querySelector<SVGPathElement>('.speech-tail')!;
-  const anchor=root.querySelector<SVGCircleElement>('.face-anchor')!;
   const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
   const timers=new Set<ReturnType<typeof setTimeout>>();
   let hovering=launch.matches(':hover'),focused=document.activeElement===launch,index=0,frameId:number|undefined;
@@ -33,7 +39,7 @@ export default function AssistantMascot({open,onToggle,rootRef,panelRef}:Props){
   const later=(action:()=>void,delay:number)=>{const id=setTimeout(()=>{timers.delete(id);if(!disposed)action()},delay);timers.add(id);return id;};
   const cancel=(id:ReturnType<typeof setTimeout>|undefined)=>{if(id!==undefined){clearTimeout(id);timers.delete(id)}};
   const face=()=>root.classList.toggle('face-front',hovering||focused||open||root.classList.contains('idle-front'));
-  const canIdle=()=>!disposed&&!document.hidden&&!reduced.matches&&!hovering&&!focused&&!open;
+  const canIdle=()=>!disposed&&!document.hidden&&!reduced.matches&&!hovering&&!focused;
   function blink(double=false){
    if(reduced.matches||!root!.classList.contains('face-front'))return;
    root!.classList.remove('blinking','double-blink');void launch!.offsetWidth;
@@ -53,7 +59,7 @@ export default function AssistantMascot({open,onToggle,rootRef,panelRef}:Props){
   function nextIdle(){
    if(!canIdle())return;
    cancel(startTimer);cancel(gestureTimer);root!.classList.remove(...gestures);
-   const step=sequence[index++%sequence.length];
+   const steps=open?openSequence:sequence,step=steps[index++%steps.length];
    root!.classList.add('idle-mode');root!.classList.toggle('idle-front',step.front);face();
    startTimer=later(()=>{
     if(!canIdle()||!root!.classList.contains('idle-mode'))return;
@@ -66,13 +72,18 @@ export default function AssistantMascot({open,onToggle,rootRef,panelRef}:Props){
    if(disposed||!root!.isConnected)return;
    const showing=open||root!.classList.contains('is-greeting');
    if(!showing){tail.setAttribute('d','');return;}
-   const r=root!.getBoundingClientRect(),bubble=(open?panel!:hello).getBoundingClientRect(),matrix=anchor.getScreenCTM();
-   if(!matrix||!r.width||!r.height)return;
-   const point=new DOMPoint(anchor.cx.baseVal.value,anchor.cy.baseVal.value).matrixTransform(matrix);
-   const sx=root!.clientWidth/r.width,sy=root!.clientHeight/r.height,x=(point.x-r.left)*sx,y=(point.y-r.top)*sy;
-   const left=(bubble.left-r.left)*sx,right=(bubble.right-r.left)*sx,baseY=(bubble.bottom-r.top)*sy-2;
-   const baseX=Math.max(left+24,Math.min(right-27,x-35)),middleY=baseY+(y-baseY)*.59;
+   const anchor=root!.querySelector<SVGCircleElement>('.face-anchor');
+   const bubble=(open?panel!:hello).getBoundingClientRect();
+   if(!anchor?.isConnected||!bubble.width||!root!.clientWidth||!root!.clientHeight){tail.setAttribute('d','');return;}
    link.setAttribute('viewBox',`0 0 ${root!.clientWidth} ${root!.clientHeight}`);
+   const matrix=anchor.getScreenCTM(),linkMatrix=link.getScreenCTM();
+   if(!matrix||!linkMatrix){tail.setAttribute('d','');return;}
+   const point=new DOMPoint(anchor.cx.baseVal.value,anchor.cy.baseVal.value).matrixTransform(matrix);
+   const inverse=linkMatrix.inverse(),target=point.matrixTransform(inverse);
+   const bottomLeft=new DOMPoint(bubble.left,bubble.bottom).matrixTransform(inverse),bottomRight=new DOMPoint(bubble.right,bubble.bottom).matrixTransform(inverse);
+   const x=target.x,y=target.y,left=bottomLeft.x,right=bottomRight.x,baseY=bottomLeft.y-2;
+   if(![x,y,left,right,baseY].every(Number.isFinite)){tail.setAttribute('d','');return;}
+   const baseX=Math.max(left+24,Math.min(right-27,x-35)),middleY=baseY+(y-baseY)*.59;
    tail.setAttribute('d',`M ${baseX-7} ${baseY} C ${baseX-9} ${middleY}, ${x-29} ${y-3}, ${x} ${y} C ${x-19} ${y-10}, ${baseX+10} ${middleY}, ${baseX+7} ${baseY} Z`);
   }
   function frame(){frameId=undefined;if(disposed||document.hidden)return;updateTail();if(!reduced.matches&&(open||root!.classList.contains('is-greeting')))frameId=requestAnimationFrame(frame)}
@@ -95,7 +106,7 @@ export default function AssistantMascot({open,onToggle,rootRef,panelRef}:Props){
   document.addEventListener('visibilitychange',visibility);reduced.addEventListener('change',motionChange);
   window.addEventListener('resize',ensureTail);
   const observer=new ResizeObserver(ensureTail);observer.observe(root);observer.observe(panel);observer.observe(hello);
-  if(open){wave();ensureTail()}else if(hovering||focused)greet(true);else scheduleIdle(1800);
+  if(open){wave();ensureTail();scheduleIdle(3000)}else if(hovering||focused)greet(true);else scheduleIdle(1800);
   return()=>{
    disposed=true;for(const timer of timers)clearTimeout(timer);if(frameId!==undefined)cancelAnimationFrame(frameId);observer.disconnect();
    launch.removeEventListener('pointerenter',enter);launch.removeEventListener('pointerleave',leave);launch.removeEventListener('focus',focus);launch.removeEventListener('blur',blur);
@@ -108,7 +119,7 @@ export default function AssistantMascot({open,onToggle,rootRef,panelRef}:Props){
   <svg className="speech-link" aria-hidden="true"><path className="speech-tail"/></svg>
   <button ref={launchRef} type="button" className="assistant-launch" onClick={onToggle} aria-label={open?'Fechar assistente Atlinhas':'Abrir assistente Atlinhas'} aria-expanded={open} aria-controls="assistant-panel">
    <span className="mascot-shadow" aria-hidden="true"/>
-   <span className="mascot-art" aria-hidden="true" dangerouslySetInnerHTML={{__html:mascotArt}}/>
+   <MascotArt/>
    <span className="mascot-name" aria-hidden="true">Atlinhas</span>
   </button>
  </>;

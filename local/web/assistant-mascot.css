@@ -57,3 +57,14 @@
 @media(max-height:620px){.atlas-assistant{width:164px;height:174px;bottom:14px}.atlas-assistant .assistant-launch{width:164px;height:174px}.atlas-assistant .mascot-art{height:164px}.atlas-assistant .mascot-hello{right:105px;bottom:181px;max-width:min(180px,calc(100vw - 135px))}.atlas-assistant > section{bottom:193px;max-height:calc(100dvh - 228px)}}
 @media(pointer:coarse){.atlas-assistant .assistant-close{width:44px;height:44px}.atlas-assistant nav button{min-height:44px}}
 @media(prefers-reduced-motion:reduce){.atlas-assistant .assistant-launch *,.atlas-assistant .head-pivot,.atlas-assistant .head-front,.atlas-assistant .head-quarter,.atlas-assistant .classic-body,.atlas-assistant .frontal-body,.atlas-assistant .mascot-hello,.atlas-assistant .speech-tail{animation:none!important;transition:none!important}}
+
+/* Gestos breves também durante a conversa, sem virar a cabeça para outra pose. */
+.atlas-assistant.gesture-sway-arms .shoulder-left{animation:atl-sway-left 3s ease-in-out both}
+.atlas-assistant.gesture-sway-arms .shoulder-right{animation:atl-sway-right 3s ease-in-out both}
+.atlas-assistant.gesture-sway-arms .classic-arm-left{animation:atl-sway-classic-left 3s ease-in-out both}
+.atlas-assistant.gesture-sway-arms .classic-arm-right{animation:atl-sway-right 3s ease-in-out both}
+.atlas-assistant.gesture-soft-head .head-pivot{animation:atl-soft-head 3s ease-in-out both}
+@keyframes atl-sway-left{0%,100%{transform:rotate(-3deg)}25%{transform:rotate(5deg)}50%{transform:rotate(-7deg)}75%{transform:rotate(3deg)}}
+@keyframes atl-sway-classic-left{0%,100%{transform:rotate(0)}25%{transform:rotate(6deg)}50%{transform:rotate(-4deg)}75%{transform:rotate(3deg)}}
+@keyframes atl-sway-right{0%,100%{transform:rotate(0)}25%{transform:rotate(-6deg)}50%{transform:rotate(5deg)}75%{transform:rotate(-3deg)}}
+@keyframes atl-soft-head{0%,100%{transform:rotate(0) translateY(0)}25%{transform:rotate(-3deg) translateY(3px)}52%{transform:rotate(3deg) translateY(-2px)}78%{transform:rotate(-1deg) translateY(2px)}}
