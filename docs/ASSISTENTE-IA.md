@@ -1,5 +1,15 @@
 # Assistente Atlas — integração em construção
 
+## Preparação de propostas — 14/09/2026
+
+`POST /api/assistant/proposals` prepara criação/edição de linhas (incluindo chip/eSIM via slot) e aparelhos. Piloto administrativo, sem chamada à IA. Recebe kind (`line`/`device`), action (`create`/`edit`), settingsVersion e fields parciais; edição exige targetId explícito e expectedVersion. Para aparelhos, a versão é a das configurações.
+
+Retorna perguntas para campos obrigatórios omitidos, erro de validação, ausência de mudanças ou resumo antes/depois com alterações e linhas afetadas pelo aparelho. Reaproveita as regras existentes de cadastro, slots e duplicidade. Segredos e observações são excluídos dos campos aceitos e do resumo. Nada é salvo: `canSave:false` é sempre retornado; `ready_for_review` significa somente pronto para revisão, não autorização de escrita.
+
+A preparação é sem estado: o consumidor deve reenviar os campos acumulados a cada correção. Ainda falta persistir rascunhos por sessão, apresentar as propostas na conversa e implementar a confirmação vinculada à proposta exata com nova verificação de concorrência. Não usar a resposta atual como token de aprovação. Integração com contas/Verificações/Cofre permanece para etapas posteriores.
+
+TypeScript, compilação e testes direcionados HTTP/SQLite passaram neste ambiente: campos faltantes, antes/depois, edição sem mudança, números duplicados, slots ocupados, versões antigas, aparelhos vinculados e ausência de gravação. Consulta e configuração do assistente revalidadas por relação direta. Sem suíte integral, navegador ou teste no Mac nesta etapa. Publicação com `[skip ci]` mantém a política de testes direcionados enquanto o workflow seletivo continua pendente.
+
 ## Consulta local — etapa de 14/09/2026
 
 Implementado `GET /api/assistant/catalog`, inicialmente restrito ao administrador como o piloto. Aceita `kind=lines|devices`, `query`, `offset` e `limit` (máximo 20). Retorna campos permitidos explicitamente, versões, vínculos atuais de aparelho/slot, quantidade total, próxima página e indicação de múltiplos resultados. Não consulta Cofre, chaves, histórico ou observações. Chips/eSIMs são representados pelos vínculos linha/slot do cadastro existente, não por um inventário independente.
