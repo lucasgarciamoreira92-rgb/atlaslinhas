@@ -2,7 +2,7 @@ import {test,expect} from './support/fixtures';
 import {setup} from './support/ui';
 test.use({assistantStub:true});
 test('conversa: perguntas, correção, aprovação real, edição e Cofre sem segredo no chat',async({page})=>{
- await setup(page);await page.getByRole('button',{name:'+ Assistente',exact:true}).click();await page.getByRole('button',{name:'Conversa OpenAI',exact:true}).click();
+ await setup(page);await page.getByRole('button',{name:'Abrir assistente Atlinhas',exact:true}).click();await page.getByRole('button',{name:'Conversa OpenAI',exact:true}).click();
  const chat=page.getByLabel('Conversa com IA',{exact:true}),review=chat.getByLabel('Resumo para aprovação',{exact:true});
  const send=async(text:string)=>{await chat.getByLabel('Mensagem',{exact:true}).fill(text);await chat.getByRole('button',{name:'Enviar',exact:true}).click();await expect(chat.getByLabel('Mensagem',{exact:true})).toBeEnabled()};
  await send('Cadastrar celular');await expect(chat.getByRole('log')).toContainText('Qual é o nome');

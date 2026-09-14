@@ -1,7 +1,7 @@
 import {test,expect} from './support/fixtures';
 import {setup} from './support/ui';
 test('assistente: conta, múltiplos destinos, resumo e edição aprovada',async({page})=>{
- await setup(page);await page.getByRole('button',{name:'+ Assistente',exact:true}).click();
+ await setup(page);await page.getByRole('button',{name:'Abrir assistente Atlinhas',exact:true}).click();
  await page.getByRole('button',{name:'Verificações',exact:true}).click();
  const panel=page.getByLabel('Preparar verificações',{exact:true});
  await panel.getByRole('button',{name:'Consultar contas e vínculos',exact:true}).click();

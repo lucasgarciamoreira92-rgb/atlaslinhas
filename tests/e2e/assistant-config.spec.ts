@@ -3,7 +3,7 @@ import {setup,admin} from './support/ui';
 
 test('assistente: campos visíveis e separados em desktop e celular',async({page},info)=>{
  await setup(page);
- await page.getByRole('button',{name:'+ Assistente',exact:true}).click();
+ await page.getByRole('button',{name:'Abrir assistente Atlinhas',exact:true}).click();
  const panel=page.getByRole('region',{name:'Configuração do assistente',exact:true});
  await page.getByRole('button',{name:'Configurar OpenAI',exact:true}).click();
  for(const width of [1280,768,390]){
@@ -35,7 +35,7 @@ test('assistente: campos visíveis e separados em desktop e celular',async({page
 
 test('assistente: configuração privada, senha e persistência',async({page,app})=>{
  await setup(page);
- await page.getByRole('button',{name:'+ Assistente',exact:true}).click();
+ await page.getByRole('button',{name:'Abrir assistente Atlinhas',exact:true}).click();
  await page.getByRole('button',{name:'Configurar OpenAI',exact:true}).click();
  await page.getByLabel('Chave da API',{exact:true}).fill('sk-ficticia-nao-e-uma-chave-real');
  await page.getByLabel('Identificador do modelo',{exact:true}).fill('modelo-ficticio');
@@ -49,7 +49,7 @@ test('assistente: configuração privada, senha e persistência',async({page,app
  await expect(page.getByLabel('Mensagem',{exact:true})).toBeEnabled();
  await expect(page.locator('.atlas-assistant')).not.toContainText('sk-ficticia');
  await page.reload();
- await page.getByRole('button',{name:'+ Assistente',exact:true}).click();
+ await page.getByRole('button',{name:'Abrir assistente Atlinhas',exact:true}).click();
  await page.getByRole('button',{name:'Conversa OpenAI',exact:true}).click();
  await expect(page.getByLabel('Mensagem',{exact:true})).toBeEnabled();
  // A chave é fictícia: não enviar mensagens nem fazer chamadas externas.

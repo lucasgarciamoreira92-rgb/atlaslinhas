@@ -3,7 +3,7 @@ import {setup} from './support/ui';
 
 test('rascunho guiado: perguntas, correção, reabertura e nenhuma gravação',async({page})=>{
  await setup(page);
- await page.getByRole('button',{name:'+ Assistente',exact:true}).click();
+ await page.getByRole('button',{name:'Abrir assistente Atlinhas',exact:true}).click();
  await page.getByRole('button',{name:'Nova linha / chip',exact:true}).click();
  const answer=page.getByLabel('Resposta',{exact:true});
  const send=page.getByRole('button',{name:'Enviar resposta',exact:true});
@@ -15,7 +15,7 @@ test('rascunho guiado: perguntas, correção, reabertura e nenhuma gravação',a
  const summary=page.getByLabel('Resumo para revisão',{exact:true});
  await expect(summary).toContainText('Linha de teste');await expect(summary).toContainText('51999998888');
  await page.getByRole('button',{name:'Fechar assistente',exact:true}).click();
- await page.getByRole('button',{name:'+ Assistente',exact:true}).click();
+ await page.getByRole('button',{name:'Abrir assistente Atlinhas',exact:true}).click();
  await expect(summary).toContainText('Linha de teste');
  await page.getByLabel('Campo a informar',{exact:true}).selectOption('name');await answer.fill('Linha corrigida');await send.click();
  await expect(summary).toContainText('Linha corrigida');await expect(summary).not.toContainText('Linha de teste');
@@ -39,7 +39,7 @@ test('rascunho guiado: perguntas, correção, reabertura e nenhuma gravação',a
 });
 
 test('rascunho guiado: aparelho novo e seleção explícita para editar',async({page})=>{
- await setup(page);await page.getByRole('button',{name:'+ Assistente',exact:true}).click();
+ await setup(page);await page.getByRole('button',{name:'Abrir assistente Atlinhas',exact:true}).click();
  await page.getByRole('button',{name:'Novo aparelho',exact:true}).click();
  const answer=page.getByLabel('Resposta',{exact:true}),send=page.getByRole('button',{name:'Enviar resposta',exact:true});
  await answer.fill('Celular de teste');await send.click();await expect(send).toBeDisabled();

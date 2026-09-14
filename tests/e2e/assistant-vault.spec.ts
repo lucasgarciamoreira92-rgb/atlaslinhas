@@ -5,7 +5,7 @@ test('assistente: Cofre protegido, aprovação, edição e limpeza ao sair',asyn
  await setup(page);
  const assistantRequests:string[]=[];
  page.on('request',r=>{if(r.method()==='POST'&&new URL(r.url()).pathname.startsWith('/api/assistant'))assistantRequests.push(r.postData()||'')});
- await page.getByRole('button',{name:'+ Assistente',exact:true}).click();
+ await page.getByRole('button',{name:'Abrir assistente Atlinhas',exact:true}).click();
  await page.getByRole('button',{name:'Verificações',exact:true}).click();
  const accounts=page.getByLabel('Preparar verificações',{exact:true});
  await accounts.getByRole('button',{name:'Consultar contas e vínculos',exact:true}).click();
@@ -42,7 +42,7 @@ test('assistente: Cofre protegido, aprovação, edição e limpeza ao sair',asyn
  expect((await vault({action:'read',token,field:'recoveryCodes',intent:'reveal'})).value).toBe(codes);
  await unlock();await pane.getByLabel('Senha da conta',{exact:true}).fill('DESCARTAR');
  await page.getByRole('button',{name:'Fechar assistente',exact:true}).click();await expect(pane).toHaveCount(0);
- await page.getByRole('button',{name:'+ Assistente',exact:true}).click();await pane.getByLabel('Conta do Cofre',{exact:true}).selectOption(account.id);
+ await page.getByRole('button',{name:'Abrir assistente Atlinhas',exact:true}).click();await pane.getByLabel('Conta do Cofre',{exact:true}).selectOption(account.id);
  await expect(pane.getByLabel('Senha da conta',{exact:true})).toHaveCount(0);
  await unlock();await expect(pane.getByLabel('Senha da conta',{exact:true})).toHaveValue('');
  await pane.getByLabel('Senha da conta',{exact:true}).fill('DESCARTAR');

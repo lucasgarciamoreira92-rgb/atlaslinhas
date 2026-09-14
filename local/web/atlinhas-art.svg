@@ -1,0 +1,45 @@
+<svg class="robot" viewBox="-80 0 1370 1254" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<image id="atl-front-art" width="1254" height="1254" href="/mascots/atlinhas-front.webp"/>
+<image id="atlinhas-art" width="1254" height="1254" href="/mascots/atlinhas-classic.jpg"/>
+<clipPath id="atlinhas-head-cut"><path d="M426 426 C398 367 431 217 488 158 C530 113 576 94 599 88 C660 64 735 73 795 87 C929 112 988 195 1012 288 C1040 349 1041 439 1012 491 C967 560 903 577 825 580 L682 585 C582 581 477 542 448 483 Z"/></clipPath>
+<clipPath id="atlinhas-body-cut"><path d="M653 573 L794 573 L804 614 C832 614 847 630 854 659 L891 888 L867 942 L839 973 C828 1008 819 1105 751 1166 Q723 1201 694 1160 L664 1114 Q632 1169 593 1156 Q570 1147 552 1090 L539 1035 Q530 1000 577 975 L594 952 Q556 918 544 860 L542 735 L570 638 Q589 606 639 614 Z"/></clipPath>
+<clipPath id="atlinhas-left-cut"><path d="M583 617 Q549 580 509 600 Q477 618 453 663 L376 643 L293 605 Q278 579 254 546 Q235 528 222 541 Q211 560 229 588 L251 615 L221 617 Q176 579 155 583 Q129 586 137 610 L177 648 Q172 665 202 681 Q233 696 276 710 Q296 752 369 783 Q423 810 456 780 Q486 757 502 715 L543 679 Z"/></clipPath>
+<clipPath id="atlinhas-right-cut"><path d="M856 619 Q902 597 946 648 Q984 686 984 737 L981 789 Q1023 790 1036 821 Q1052 862 1028 894 Q1004 936 962 953 Q926 974 887 968 Q859 981 825 974 L788 964 Q767 954 769 934 Q723 920 728 900 Q732 883 771 879 Q747 852 767 837 Q780 828 807 846 L849 866 Q864 854 902 859 L921 814 Q884 792 872 768 Q841 725 823 685 Z"/></clipPath>
+<clipPath id="atl-front-head"><path d="M626 67 C702 63 771 83 825 122 C871 156 894 204 900 241 L910 260 Q930 281 934 324 Q942 370 929 396 L914 415 L897 444 Q882 482 846 504 C790 539 710 543 624 543 C535 542 445 536 397 494 Q368 469 354 437 L332 411 Q315 386 315 342 Q315 300 326 279 L342 254 L357 231 Q369 171 416 132 C465 92 547 70 626 67Z"/></clipPath>
+<clipPath id="atl-body"><path d="M580 538 L677 538 L687 569 Q751 570 781 602 L800 679 Q808 758 785 824 Q768 872 736 898 Q690 933 625 930 Q559 926 514 887 Q478 848 467 790 L463 698 Q467 638 495 604 Q526 578 570 571Z"/></clipPath>
+<clipPath id="atl-upper-left"><path d="M479 580 Q448 563 415 585 Q376 610 358 644 L340 677 Q328 702 350 715 Q373 723 402 713 L454 699 Q476 683 486 652 L492 613Z"/></clipPath>
+<clipPath id="atl-forearm-left"><path d="M201 570 Q218 549 247 547 Q279 539 291 554 Q321 590 334 621 Q346 641 352 666 Q380 678 382 701 Q378 729 353 737 Q333 740 318 733 Q287 738 262 713 Q239 690 222 650 Q203 612 201 570Z"/></clipPath>
+<clipPath id="atl-hand-left"><path d="M211 558 Q190 548 178 529 L164 506 Q140 504 127 490 Q112 477 120 464 Q128 449 143 457 L167 472 L178 458 L150 421 Q139 400 151 390 Q163 377 176 389 Q192 404 198 425 L209 447 L221 445 L210 414 Q204 388 209 369 Q214 351 228 355 Q244 359 248 379 L249 410 L254 450 L268 459 L274 433 Q277 409 284 391 Q292 377 302 382 Q315 388 308 407 L301 431 L291 465 L291 482 L309 468 Q334 450 346 461 Q362 477 342 493 Q329 507 309 513 L292 516 Q293 541 274 553 Q253 566 231 567Z"/></clipPath>
+<clipPath id="atl-upper-right"><path d="M785 596 Q816 580 842 600 Q870 613 887 648 Q907 678 901 701 Q890 728 866 738 Q843 752 823 730 L806 710 Q790 708 785 682Z"/></clipPath>
+<clipPath id="atl-forearm-right"><path d="M864 731 Q884 719 902 730 Q926 735 938 756 Q961 784 969 822 Q976 858 957 896 Q943 924 921 939 L901 925 Q875 906 848 901 Q832 893 834 868 L837 807 Q841 771 851 760Z"/></clipPath>
+<clipPath id="atl-hand-right"><path d="M847 891 Q872 885 892 898 Q921 910 917 933 L905 967 Q895 985 883 999 Q873 1026 847 1041 Q824 1052 809 1041 Q791 1035 786 1021 Q782 1009 795 996 L809 981 Q787 986 782 973 Q779 959 793 943 L814 924 Q826 901 847 891Z"/></clipPath>
+<clipPath id="atl-pelvis"><path d="M574 914 Q626 935 682 916 L696 950 L719 982 L677 1005 L629 1023 L580 1008 L550 976Z"/></clipPath>
+<clipPath id="atl-leg-left"><path d="M548 940 Q585 943 611 974 Q630 1005 627 1041 L615 1106 Q609 1141 588 1154 Q572 1162 555 1148 Q535 1128 519 1097 Q499 1062 491 1027 Q480 994 490 970 Q510 947 548 940Z"/></clipPath>
+<clipPath id="atl-leg-right"><path d="M689 942 Q734 940 759 968 Q778 993 766 1033 Q754 1080 727 1119 Q709 1149 685 1156 Q665 1155 653 1135 Q637 1107 635 1072 L634 1028 Q640 986 658 962Z"/></clipPath>
+<radialGradient id="atl-lid-dark"><stop offset="68%" stop-color="#111510"/><stop offset="100%" stop-color="#111510" stop-opacity="0"/></radialGradient>
+<linearGradient id="atl-reflection" x1="0" x2="1"><stop stop-color="#d4e1ba" stop-opacity="0"/><stop offset=".55" stop-color="#d4e1ba" stop-opacity=".5"/><stop offset="1" stop-color="#d4e1ba" stop-opacity="0"/></linearGradient>
+</defs>
+<g class="body-float">
+<g class="classic-body"><g transform="translate(-68 -31) scale(.985)">
+<g clip-path="url(#atlinhas-body-cut)"><use href="#atlinhas-art"/></g>
+<g class="classic-arm-left"><g clip-path="url(#atlinhas-left-cut)"><use href="#atlinhas-art"/></g></g>
+<g class="classic-arm-right"><g clip-path="url(#atlinhas-right-cut)"><use href="#atlinhas-art"/></g></g>
+</g></g>
+<g class="frontal-body">
+<g clip-path="url(#atl-pelvis)"><use href="#atl-front-art"/></g>
+<g class="leg-left"><g clip-path="url(#atl-leg-left)"><use href="#atl-front-art"/></g></g>
+<g class="leg-right"><g clip-path="url(#atl-leg-right)"><use href="#atl-front-art"/></g></g>
+<g class="shoulder-right"><g clip-path="url(#atl-upper-right)"><use href="#atl-front-art"/></g><g clip-path="url(#atl-forearm-right)"><use href="#atl-front-art"/></g><g class="wrist-right"><g clip-path="url(#atl-hand-right)"><use href="#atl-front-art"/></g></g></g>
+<g class="shoulder-left"><g clip-path="url(#atl-upper-left)"><use href="#atl-front-art"/></g><g class="elbow-left"><g clip-path="url(#atl-forearm-left)"><use href="#atl-front-art"/></g><g class="wrist-left"><g clip-path="url(#atl-hand-left)"><use href="#atl-front-art"/></g></g></g></g>
+<g clip-path="url(#atl-body)"><use href="#atl-front-art"/></g>
+</g>
+<g class="head-pivot">
+<g class="head-quarter"><g transform="translate(-68 -31) scale(.985)"><g clip-path="url(#atlinhas-head-cut)"><use href="#atlinhas-art"/></g></g></g>
+<g class="head-front"><g clip-path="url(#atl-front-head)"><use href="#atl-front-art"/></g><path class="visor-sheen" d="M421 202 L451 191 L725 441 L684 450Z" fill="url(#atl-reflection)"/>
+<g class="blink-cover"><ellipse cx="512" cy="323" rx="70" ry="52" fill="url(#atl-lid-dark)"/><ellipse cx="729" cy="323" rx="70" ry="52" fill="url(#atl-lid-dark)"/><path d="M477 332 Q511 345 548 332 M694 332 Q730 345 765 332" fill="none" stroke="#a1bb70" stroke-width="7" stroke-linecap="round"/></g>
+</g>
+<circle class="face-anchor" cx="325" cy="430" r="1" fill="transparent"/>
+</g>
+</g>
+</svg>
