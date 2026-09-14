@@ -8,6 +8,7 @@ import {accessGET,accessPOST} from './access-service';
 import {vaultPOST} from './vault';
 import {assistantGET,assistantPOST} from './assistant';
 import {configureAssistant} from './assistant-config';
+import {assistantCatalogGET} from './assistant-catalog';
 import * as lines from '@/app/api/lines/route';
 import * as settings from '@/app/api/settings/route';
 import * as history from '@/app/api/history/route';
@@ -22,6 +23,7 @@ const routes:Record<string,Partial<Record<string,Handler>>>={'/api/access':{GET:
 const port=Number(process.env.ATLAS_PORT||4310);if(!Number.isInteger(port)||port<1024||port>65535)throw Error('ATLAS_PORT deve estar entre 1024 e 65535.');
 routes['/api/assistant']={GET:assistantGET,POST:assistantPOST};
 routes['/api/assistant/config']={POST:configureAssistant};
+routes['/api/assistant/catalog']={GET:assistantCatalogGET};
 const allowedHosts=new Set([`127.0.0.1:${port}`,`localhost:${port}`]);
 const staticRoot=join(projectRoot,'local-dist','client');
 const types:Record<string,string>={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.ico':'image/x-icon','.woff2':'font/woff2','.json':'application/json'};

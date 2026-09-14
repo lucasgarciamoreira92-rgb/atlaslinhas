@@ -1,5 +1,13 @@
 # Assistente Atlas — integração em construção
 
+## Consulta local — etapa de 14/09/2026
+
+Implementado `GET /api/assistant/catalog`, inicialmente restrito ao administrador como o piloto. Aceita `kind=lines|devices`, `query`, `offset` e `limit` (máximo 20). Retorna campos permitidos explicitamente, versões, vínculos atuais de aparelho/slot, quantidade total, próxima página e indicação de múltiplos resultados. Não consulta Cofre, chaves, histórico ou observações. Chips/eSIMs são representados pelos vínculos linha/slot do cadastro existente, não por um inventário independente.
+
+Esta entrega é uma base de servidor: não foi ligada ao chat nem ao modelo. Nenhuma operação de gravação foi adicionada. Integração real OpenAI adiada para o final por decisão do usuário.
+
+Validação direcionada neste ambiente de desenvolvimento: TypeScript, compilação e `node scripts/test-assistant-config.mjs`, com HTTP/SQLite temporários. Cobertura: autorização, busca sem acentos e por número formatado, ambiguidade, paginação, vínculos, resultado vazio, ausência de observações e preservação das linhas. Configuração privada também revalidada. Nenhuma chamada externa, teste de navegador ou suíte completa nesta etapa; não equivale a teste no Mac. Publicação documental/técnica usa `[skip ci]` para não disparar a suíte integral ainda configurada no workflow. Seleção automática de testes no CI e acionamento específico do assistente no Mac continuam pendentes.
+
 Provedor aprovado: OpenAI. Experiência aprovada: conversa sequencial, histórico visível e resumo de aprovação no chat. Escopo: consultas, criação e edição de linhas, chips/eSIMs, aparelhos, verificações e contas do Cofre. Segredos passam exclusivamente pelo painel protegido; não são contexto do modelo.
 
 ## Entrega técnica inicial
