@@ -1,5 +1,15 @@
 # Assistente Atlas — integração em construção
 
+## Verificações no assistente — 14/09/2026
+
+Novo modo Verificações no painel guiado: consulta de contas, criação/edição de metadados, responsável existente, situação 2FA, múltiplos métodos/destinos, finalidade, etapa, preferência, situação e responsável de cada destino. SMS/ligação reutilizam linhas; autenticador/aprovação reutilizam aparelhos; e-mail seleciona outra caixa cadastrada. Chaves físicas, recuperação e outros registram apenas localização/identificação, nunca o código. Pessoas novas continuam sendo cadastradas na área existente. Métodos não ativam 2FA automaticamente.
+
+`/api/assistant/accounts` é administrativo, seleciona somente dados/identificadores/versões e nunca carrega colunas de credenciais ou políticas na resposta. Propostas rejeitam segredos e políticas no payload, validam vínculos e duplicidade, usam aprovação de sessão e revisão global conferida dentro da transação de gravação. Históricos seguem o serviço existente. Edições preservam permissões e credenciais; contas novas começam visíveis somente a administradores, com consulta rápida desativada, explicitado no resumo. Compartilhamento é ajustado pelo cadastro existente.
+
+O fluxo continua guiado, sem IA real. Inputs livres não são detector automático de segredos: não digitar senhas/códigos em instruções ou descrições. Cofre protegido no painel permanece como próxima etapa. Não há recebimento automático de códigos. Após salvar, atualizar a área Verificações para carregar os registros.
+
+TypeScript, compilação, testes do assistente e do serviço de Verificações/Cofre passaram em ambiente isolado. Cobertura relacionada de permissões/Cofre foi repetida porque a gravação de contas é compartilhada. Suíte integral da aplicação não executada. Validação de interface segue somente bloco assistente no Mac após publicação.
+
 ## Aprovação e gravação — 14/09/2026
 
 Validação seletiva no Mac: run 34840412677, quatro cenários aprovados, zero falhas/instáveis/ignorados. Os cenários de rascunho agora também criam e editam linha e aparelho pela interface, conferindo que o banco só muda após Aprovar e salvar. A pendência anterior de seleção/edição no navegador foi coberta nesta rodada. Nenhuma chamada à OpenAI ou uso dos dados reais.

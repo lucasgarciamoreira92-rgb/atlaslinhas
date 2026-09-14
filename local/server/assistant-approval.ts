@@ -4,8 +4,9 @@ import {requireActor,AccessError} from '@/lib/access';
 import {sessionHash,sessionIdentity} from './auth';
 import {saveLine} from '@/app/api/lines/route';
 import {saveSettings} from '@/app/api/settings/route';
+import {saveAccess} from './access-service';
 
-type Review={revision:string;expiresAt:number;token?:string;kind?:'line'|'device';payload?:unknown;settingsVersion?:number;lines?:string};
+type Review={revision:string;expiresAt:number;token?:string;kind?:'line'|'device'|'account';payload?:unknown;settingsVersion?:number;lines?:string};
 const reviews=new Map<string,Review>();
 export function beginReview(req:Request){
  for(const [key,value] of reviews)if(value.expiresAt<Date.now())reviews.delete(key);
@@ -25,8 +26,8 @@ export async function assistantApprovePOST(req:Request){
  // Consume before any await: concurrent or repeated clicks cannot write twice.
  reviews.delete(key);
  const write=new Request(req.url,{method:'POST',headers:req.headers,body:JSON.stringify(review.payload)});
- const response=review.kind==='line'?await saveLine(write,review.settingsVersion):await saveSettings(write,review.lines);
+ const response=review.kind==='account'?await saveAccess(write,review.settingsVersion):review.kind==='line'?await saveLine(write,review.settingsVersion):await saveSettings(write,review.lines);
  if(!response.ok)return response;
- const result=await response.json() as {line?:{id:string;version:number};config?:{version:number}};
- return Response.json({saved:true,kind:review.kind,id:result.line?.id??null,version:result.line?.version??result.config?.version,message:'Cadastro salvo após sua aprovação.'});
+ const result=await response.json() as {account?:{id:string;version:number};line?:{id:string;version:number};config?:{version:number}};
+ return Response.json({saved:true,kind:review.kind,id:result.account?.id??result.line?.id??null,version:result.account?.version??result.line?.version??result.config?.version,message:'Cadastro salvo após sua aprovação.'});
 }
