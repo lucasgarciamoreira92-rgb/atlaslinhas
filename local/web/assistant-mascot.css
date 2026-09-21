@@ -47,7 +47,7 @@
 .atlas-assistant .assistant-close{border-radius:50%;background:#f2f4ec}
 .atlas-assistant .assistant-conversation{font-size:14px;line-height:1.55;color:#294436}
 @media(max-width:480px){.atlas-assistant{right:16px;bottom:18px}.atlas-assistant .mascot-hello{right:135px;max-width:calc(100vw - 167px)}.atlas-assistant > section{right:0;width:calc(100vw - 32px)}}
-@media(max-height:620px){.atlas-assistant{width:164px;height:174px;bottom:14px}.atlas-assistant .assistant-launch{width:164px;height:174px}.atlas-assistant .mascot-art{height:164px}.atlas-assistant .mascot-hello{right:105px;bottom:181px;max-width:min(180px,calc(100vw - 135px))}.atlas-assistant > section{bottom:193px;max-height:calc(100dvh - 228px)}}
+@media(max-height:620px){.atlas-assistant{width:164px;height:174px;bottom:14px}.atlas-assistant .assistant-launch{width:164px;height:174px}.atlas-assistant .mascot-art{height:164px}.atlas-assistant .mascot-hello{right:105px;bottom:181px;max-width:min(180px,calc(100vw - 135px))}.atlas-assistant > section{position:fixed;top:12px;right:16px;bottom:12px;height:auto;max-height:none}}
 @media(pointer:coarse){.atlas-assistant .assistant-icon{width:44px;height:44px}}
 @media(prefers-reduced-motion:reduce){.atlas-assistant .assistant-launch *,.atlas-assistant .head-pivot,.atlas-assistant .head-front,.atlas-assistant .head-quarter,.atlas-assistant .classic-body,.atlas-assistant .frontal-body,.atlas-assistant .mascot-hello,.atlas-assistant .speech-tail{animation:none!important;transition:none!important}}
 
