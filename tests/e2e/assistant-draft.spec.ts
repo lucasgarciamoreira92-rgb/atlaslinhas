@@ -1,9 +1,11 @@
 import {test,expect} from './support/fixtures';
 import {setup} from './support/ui';
+test.use({assistantStub:true});
 
 test('rascunho guiado: perguntas, correção, reabertura e nenhuma gravação',async({page})=>{
  await setup(page);
  await page.getByRole('button',{name:'Abrir assistente Atlinhas',exact:true}).click();
+ await page.getByRole('button',{name:'Abrir configurações',exact:true}).click();await page.getByRole('button',{name:/Cadastro guiado manual/}).click();
  await page.getByRole('button',{name:'Nova linha / chip',exact:true}).click();
  const answer=page.getByLabel('Resposta',{exact:true});
  const send=page.getByRole('button',{name:'Enviar resposta',exact:true});
@@ -39,7 +41,7 @@ test('rascunho guiado: perguntas, correção, reabertura e nenhuma gravação',a
 });
 
 test('rascunho guiado: aparelho novo e seleção explícita para editar',async({page})=>{
- await setup(page);await page.getByRole('button',{name:'Abrir assistente Atlinhas',exact:true}).click();
+ await setup(page);await page.getByRole('button',{name:'Abrir assistente Atlinhas',exact:true}).click();await page.getByRole('button',{name:'Abrir configurações',exact:true}).click();await page.getByRole('button',{name:/Cadastro guiado manual/}).click();
  await page.getByRole('button',{name:'Novo aparelho',exact:true}).click();
  const answer=page.getByLabel('Resposta',{exact:true}),send=page.getByRole('button',{name:'Enviar resposta',exact:true});
  await answer.fill('Celular de teste');await send.click();await expect(send).toBeDisabled();

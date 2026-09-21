@@ -131,3 +131,7 @@ Mac de Lucas: [run 34860083632](https://github.com/lucasgarciamoreira92-rgb/atla
 **Pendência da etapa 8:** atualizar a instalação diária, configurar chave/modelo privadamente no painel existente e validar linguagem natural com o provedor real, incluindo ambiguidades, campos faltantes, linhas/chips, contas/métodos com múltiplos destinos, correções e assuntos externos. Não marcar a IA real como validada com o resultado do simulador. Etapa 9: suíte completa somente ao concluir a aplicação.
 
 Referência de implementação: https://developers.openai.com/api/docs/guides/function-calling
+
+## Interface de conversa minimalista — 20/09/2026
+
+Após a primeira configuração, o Atlinhas abre diretamente na conversa. Os atalhos que antes ocupavam o topo foram movidos para o ícone de configurações; Cofre, verificações e cadastro manual continuam acessíveis nessa área. A caixa de mensagem envia com Enter e preserva Shift + Enter para quebra de linha. Nova conversa também virou uma ação compacta no cabeçalho. Antes da primeira configuração, o tutorial continua sendo a tela inicial.

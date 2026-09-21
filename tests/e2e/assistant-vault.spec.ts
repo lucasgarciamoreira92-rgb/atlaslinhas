@@ -1,12 +1,13 @@
 import {test,expect} from './support/fixtures';
 import {setup,admin} from './support/ui';
+test.use({assistantStub:true});
 
 test('assistente: Cofre protegido, aprovação, edição e limpeza ao sair',async({page})=>{
  await setup(page);
  const assistantRequests:string[]=[];
  page.on('request',r=>{if(r.method()==='POST'&&new URL(r.url()).pathname.startsWith('/api/assistant'))assistantRequests.push(r.postData()||'')});
  await page.getByRole('button',{name:'Abrir assistente Atlinhas',exact:true}).click();
- await page.getByRole('button',{name:'Verificações',exact:true}).click();
+ await page.getByRole('button',{name:'Abrir configurações',exact:true}).click();await page.getByRole('button',{name:/Verificações e autenticações/}).click();
  const accounts=page.getByLabel('Preparar verificações',{exact:true});
  await accounts.getByRole('button',{name:'Consultar contas e vínculos',exact:true}).click();
  await accounts.getByRole('button',{name:'Nova conta de verificação',exact:true}).click();
@@ -18,7 +19,7 @@ test('assistente: Cofre protegido, aprovação, edição e limpeza ao sair',asyn
  await expect(accounts.getByRole('log')).toContainText('Conta salva após sua aprovação');
  const account=(await (await page.request.get('/api/access')).json()).accounts[0];
  const pane=page.getByLabel('Cofre protegido do assistente',{exact:true});
- const openVault=async()=>{await page.getByRole('button',{name:'Cofre protegido',exact:true}).click();await pane.getByLabel('Conta do Cofre',{exact:true}).selectOption(account.id)};
+ const openVault=async()=>{if(await page.getByRole('button',{name:'Voltar às configurações',exact:true}).isVisible())await page.getByRole('button',{name:'Voltar às configurações',exact:true}).click();if(await page.getByRole('button',{name:'Abrir configurações',exact:true}).isVisible())await page.getByRole('button',{name:'Abrir configurações',exact:true}).click();await page.getByRole('button',{name:/Cofre protegido/}).click();await pane.getByLabel('Conta do Cofre',{exact:true}).selectOption(account.id)};
  const unlock=async()=>{await pane.getByRole('button',{name:/^(Cadastrar|Alterar) credencial$/}).click();await pane.getByLabel('Sua senha de acesso ao Atlas',{exact:true}).fill(admin.password);await pane.getByRole('button',{name:'Desbloquear',exact:true}).click();await expect(pane.getByLabel('Senha da conta',{exact:true})).toBeVisible()};
  await openVault();await unlock();
  const secret='SENHA-FICTICIA-ETAPA-7',codes='CODIGOS-FICTICIOS-ETAPA-7';
@@ -46,7 +47,7 @@ test('assistente: Cofre protegido, aprovação, edição e limpeza ao sair',asyn
  await expect(pane.getByLabel('Senha da conta',{exact:true})).toHaveCount(0);
  await unlock();await expect(pane.getByLabel('Senha da conta',{exact:true})).toHaveValue('');
  await pane.getByLabel('Senha da conta',{exact:true}).fill('DESCARTAR');
- await page.getByRole('button',{name:'Preparar cadastro',exact:true}).click();await expect(pane).toHaveCount(0);
+ await page.getByRole('button',{name:'Voltar às configurações',exact:true}).click();await page.getByRole('button',{name:/Cadastro guiado manual/}).click();await expect(pane).toHaveCount(0);
  await openVault();await unlock();await expect(pane.getByLabel('Senha da conta',{exact:true})).toHaveValue('');
  await page.evaluate(()=>window.dispatchEvent(new Event('blur')));await expect(pane.getByLabel('Senha da conta',{exact:true})).toHaveCount(0);
  for(const path of ['/api/access','/api/access?history='+account.id,'/api/assistant/accounts']){

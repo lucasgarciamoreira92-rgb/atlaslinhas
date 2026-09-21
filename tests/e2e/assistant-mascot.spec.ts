@@ -1,6 +1,7 @@
 import {test,expect} from './support/fixtures';
 import {setup} from './support/ui';
 import type {Page} from '@playwright/test';
+test.use({assistantStub:true});
 
 async function expectTailOutsideFace(page:Page){
  const tail=page.locator('.atlas-assistant .speech-tail');
@@ -52,22 +53,21 @@ test('Atlinhas: poses alternadas, aceno e balões sem cobrir o rosto',async({pag
  const panel=page.getByRole('region',{name:'Assistente Atlas',exact:true});
  await expect(panel).toBeVisible();await expect(root.locator('.mascot-hello')).toBeHidden();
  await expectTailOutsideFace(page);
- await expect(page.getByRole('button',{name:'Nova linha / chip',exact:true})).toBeVisible();
+ await expect(page.getByLabel('Mensagem',{exact:true})).toBeVisible();
  await info.attach('atlinhas-conversa',{body:await page.screenshot(),contentType:'image/png'});
  await page.getByRole('button',{name:'Fechar assistente',exact:true}).click();
  await expect(panel).toBeHidden();await expect(launch).toBeFocused();
 });
 
-test('Atlinhas: rabinho acompanha cliques nos cards e novos gestos durante a conversa',async({page},info)=>{
+test('Atlinhas: rabinho acompanha navegação interna e novos gestos durante a conversa',async({page},info)=>{
  await setup(page);
  await page.getByRole('button',{name:'Abrir assistente Atlinhas',exact:true}).click();
  const root=page.locator('.atlas-assistant');
- for(const name of ['Verificações','Cofre protegido','Preparar cadastro','Configurar OpenAI','Verificações']){
-  await root.getByRole('button',{name,exact:true}).click();
-  await expectTailOutsideFace(page);
- }
- await root.getByRole('button',{name:'Consultar contas e vínculos',exact:true}).click();
- await expectTailOutsideFace(page);
+ await root.getByRole('button',{name:'Abrir configurações',exact:true}).click();await expectTailOutsideFace(page);
+ await root.getByRole('button',{name:/Verificações e autenticações/}).click();await expectTailOutsideFace(page);
+ await root.getByRole('button',{name:'Consultar contas e vínculos',exact:true}).click();await expectTailOutsideFace(page);
+ await root.getByRole('button',{name:'Voltar às configurações',exact:true}).click();await root.getByRole('button',{name:/Conexão com a OpenAI/}).click();await expectTailOutsideFace(page);
+ await root.getByRole('button',{name:'Voltar às configurações',exact:true}).click();await root.getByRole('button',{name:'Voltar à conversa',exact:true}).click();await expect(root.getByLabel('Mensagem',{exact:true})).toBeVisible();
  await page.mouse.move(0,0);
  await expect(root).toHaveClass(/gesture-soft-head/,{timeout:18000});
  await expect(root.locator('.head-pivot')).toHaveCSS('animation-name','atl-soft-head');
@@ -80,8 +80,8 @@ test('Atlinhas: rabinho acompanha cliques nos cards e novos gestos durante a con
  await info.attach('atlinhas-card-e-gestos',{body:await page.screenshot(),contentType:'image/png'});
  await page.emulateMedia({reducedMotion:'reduce'});
  await expect(root.locator('.head-pivot')).toHaveCSS('animation-name','none');
- await root.getByRole('button',{name:'Configurar OpenAI',exact:true}).click();
- await root.getByRole('button',{name:'Já tenho a chave · continuar',exact:true}).click();
+ await root.getByRole('button',{name:'Abrir configurações',exact:true}).click();await root.getByRole('button',{name:/Conexão com a OpenAI/}).click();
+ await root.getByRole('button',{name:'Alterar configuração',exact:true}).click();
  await expectTailOutsideFace(page);
 });
 

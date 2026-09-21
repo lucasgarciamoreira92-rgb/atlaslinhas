@@ -2,11 +2,12 @@ import {test,expect} from './support/fixtures';
 import {setup} from './support/ui';
 test.use({assistantStub:true});
 test('conversa: perguntas, correção, aprovação real, edição e Cofre sem segredo no chat',async({page})=>{
- await setup(page);await page.getByRole('button',{name:'Abrir assistente Atlinhas',exact:true}).click();await page.getByRole('button',{name:'Conversa OpenAI',exact:true}).click();
+ await setup(page);await page.getByRole('button',{name:'Abrir assistente Atlinhas',exact:true}).click();
+ await expect(page.getByRole('button',{name:'Abrir configurações',exact:true})).toBeVisible();await expect(page.getByRole('button',{name:'Preparar cadastro',exact:true})).toHaveCount(0);
  const chat=page.getByLabel('Conversa com IA',{exact:true}),review=chat.getByLabel('Resumo para aprovação',{exact:true});
  const send=async(text:string)=>{await chat.getByLabel('Mensagem',{exact:true}).fill(text);await chat.getByRole('button',{name:'Enviar',exact:true}).click();await expect(chat.getByLabel('Mensagem',{exact:true})).toBeEnabled()};
- await send('Cadastrar celular');await expect(chat.getByRole('log')).toContainText('Qual é o nome');
- await send('Celular Financeiro iPhone 15');await expect(review).toContainText('Celular Financeiro');
+ await chat.getByLabel('Mensagem',{exact:true}).fill('Cadastrar celular');await chat.getByLabel('Mensagem',{exact:true}).press('Enter');await expect(chat.getByLabel('Mensagem',{exact:true})).toBeEnabled();await expect(chat.getByRole('log')).toContainText('Qual é o nome');
+ await chat.getByLabel('Mensagem',{exact:true}).fill('Celular Financeiro');await chat.getByLabel('Mensagem',{exact:true}).press('Shift+Enter');await expect(chat.getByLabel('Mensagem',{exact:true})).toHaveValue('Celular Financeiro\n');await chat.getByLabel('Mensagem',{exact:true}).fill('Celular Financeiro iPhone 15');await chat.getByRole('button',{name:'Enviar',exact:true}).click();await expect(chat.getByLabel('Mensagem',{exact:true})).toBeEnabled();await expect(review).toContainText('Celular Financeiro');
  expect((await (await page.request.get('/api/settings')).json()).config.devices).toHaveLength(0);
  await chat.getByLabel('Mensagem',{exact:true}).fill('Corrigir local para Sede');await expect(review.getByRole('button',{name:'Aprovar e salvar',exact:true})).toBeDisabled();
  await chat.getByRole('button',{name:'Enviar',exact:true}).click();await expect(review).toContainText('Sede');
@@ -17,6 +18,6 @@ test('conversa: perguntas, correção, aprovação real, edição e Cofre sem se
  await expect.poll(async()=>(await (await page.request.get('/api/settings')).json()).config.devices[0].location).toBe('Filial');
  await send('Assunto externo');await expect(chat.getByRole('log')).toContainText('Posso ajudar com linhas');await expect(review).toHaveCount(0);
  await send('Falha do provedor');await expect(chat.getByRole('alert')).toContainText('Limite da API');
- await chat.getByRole('button',{name:'Nova conversa',exact:true}).click();await expect(chat.getByRole('log')).not.toContainText('Celular Financeiro');
+ await page.getByRole('button',{name:'Nova conversa',exact:true}).click();await expect(chat.getByRole('log')).not.toContainText('Celular Financeiro');
  await send('Quero guardar uma senha');await chat.getByRole('button',{name:'Abrir Cofre protegido',exact:true}).click();await expect(page.getByLabel('Cofre protegido do assistente',{exact:true})).toBeVisible();
 });
