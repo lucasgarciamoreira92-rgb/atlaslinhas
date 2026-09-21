@@ -38,7 +38,7 @@
 .atlas-assistant .speech-link{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:4;overflow:visible}
 .atlas-assistant .speech-tail{fill:#fffefa;stroke:#ccd8c3;stroke-width:1;stroke-linejoin:round;opacity:0;transition:opacity .18s}
 .atlas-assistant.is-open .speech-tail,.atlas-assistant.is-greeting .speech-tail{opacity:1}
-.atlas-assistant > section{bottom:264px;right:0;width:min(440px,calc(100vw - 32px));height:min(610px,calc(100dvh - 310px));max-height:calc(100dvh - 310px);padding:0;overflow:hidden;display:flex;flex-direction:column;background:#fffefa;border:1px solid #ccd8c3;border-radius:24px;box-shadow:0 16px 58px #253f3321;z-index:8;color:#294436;pointer-events:auto;overscroll-behavior:contain;scrollbar-width:thin}
+.atlas-assistant > section{position:absolute;bottom:264px;right:0;width:min(440px,calc(100vw - 32px));height:min(610px,calc(100dvh - 310px));max-height:calc(100dvh - 310px);padding:0;overflow:hidden;display:flex;flex-direction:column;background:#fffefa;border:1px solid #ccd8c3;border-radius:24px;box-shadow:0 16px 58px #253f3321;z-index:8;color:#294436;pointer-events:auto;overscroll-behavior:contain;scrollbar-width:thin}
 .atlas-assistant .assistant-header{display:flex;align-items:center;flex:none;padding:15px 14px 14px 18px;border-bottom:1px solid #e4e9db;gap:12px}
 .atlas-assistant .assistant-signal{width:9px;height:9px;flex-shrink:0;border-radius:50%;background:#879d69;box-shadow:0 0 0 5px #edf1e4}
 .atlas-assistant .assistant-title{flex:1;min-width:0;color:#294436}
