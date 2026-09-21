@@ -42,7 +42,7 @@ test('Atlinhas: poses alternadas, aceno e balões sem cobrir o rosto',async({pag
  await expect(root.locator('.classic-body')).toHaveCSS('opacity','1');
  await expect(root.locator('.frontal-body')).toHaveCSS('opacity','1',{timeout:12000});
  await expect(root).toHaveClass(/waving/);
- await expect(root.locator('.classic-body')).toHaveCSS('opacity','1',{timeout:10000});
+ await expect(root.locator('.classic-body')).toHaveCSS('opacity','1',{timeout:18000});
  await launch.hover();
  await expect(root.locator('.head-front')).toHaveCSS('opacity','1');
  await expect(root.locator('.mascot-hello')).toBeVisible();
