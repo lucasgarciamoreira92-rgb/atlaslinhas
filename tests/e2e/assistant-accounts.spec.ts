@@ -3,7 +3,7 @@ import {setup} from './support/ui';
 test.use({assistantStub:true});
 test('assistente: conta, múltiplos destinos, resumo e edição aprovada',async({page})=>{
  await setup(page);await page.getByRole('button',{name:'Abrir assistente Atlinhas',exact:true}).click();
- await page.getByRole('button',{name:'Abrir configurações',exact:true}).click();await page.getByRole('button',{name:/Verificações e autenticações/}).click();
+ await page.getByRole('button',{name:'Abrir configurações',exact:true}).click();await page.locator('.assistant-settings-home').getByRole('button',{name:/^Verificações e autenticações/}).click();
  const panel=page.getByLabel('Preparar verificações',{exact:true});
  await panel.getByRole('button',{name:'Consultar contas e vínculos',exact:true}).click();
  await panel.getByRole('button',{name:'Nova conta de verificação',exact:true}).click();
