@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>AtlasLinhas</AssemblyName>
+    <RootNamespace>AtlasLinhas</RootNamespace>
+    <Version>0.1.0</Version>
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(AtlasAppZip)" LogicalName="AtlasLinhas.app.zip" Condition="Exists('$(AtlasAppZip)')" />
+    <EmbeddedResource Include="$(AtlasNodeExe)" LogicalName="AtlasLinhas.node.exe" Condition="Exists('$(AtlasNodeExe)')" />
+  </ItemGroup>
+</Project>

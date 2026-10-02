@@ -1,0 +1,72 @@
+name: Compilar Atlas Linhas para Windows
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+    paths:
+      - 'app/**'
+      - 'components/**'
+      - 'drizzle/**'
+      - 'lib/**'
+      - 'local/**'
+      - 'public/**'
+      - 'windows/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'scripts/build-local.mjs'
+      - '.github/workflows/windows-exe.yml'
+permissions:
+  contents: read
+jobs:
+  windows-x64:
+    runs-on: windows-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '8.0.x'
+      - name: Instalar dependências
+        shell: pwsh
+        run: |
+          npm install --global pnpm@11.19.0
+          pnpm install --frozen-lockfile
+      - name: Compilar aplicação web local
+        run: node scripts/build-local.mjs
+      - name: Preparar arquivos incorporados
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force windows/payload/app | Out-Null
+          Copy-Item -Recurse local-dist windows/payload/app/local-dist
+          Copy-Item -Recurse drizzle windows/payload/app/drizzle
+          New-Item -ItemType Directory -Force windows/payload/app/local/server/migrations | Out-Null
+          Copy-Item local/server/schema.sql windows/payload/app/local/server/schema.sql
+          Copy-Item local/server/migrations/*.sql windows/payload/app/local/server/migrations/
+          Compress-Archive -Path windows/payload/app/* -DestinationPath windows/payload/app.zip -CompressionLevel Optimal
+          $node = (Get-Command node).Source
+          Copy-Item $node windows/payload/node.exe
+      - name: Gerar executável Windows x64
+        shell: pwsh
+        run: |
+          dotnet publish windows/AtlasLinhasLauncher/AtlasLinhasLauncher.csproj `
+            -c Release -r win-x64 --self-contained true `
+            -p:PublishSingleFile=true `
+            -p:AtlasAppZip="$PWD/windows/payload/app.zip" `
+            -p:AtlasNodeExe="$PWD/windows/payload/node.exe" `
+            -o windows/publicar
+          if (!(Test-Path windows/publicar/AtlasLinhas.exe)) { throw 'Executável não foi gerado.' }
+      - name: Guardar executável genérico sem dados
+        uses: actions/upload-artifact@v4
+        with:
+          name: AtlasLinhas-Windows-x64-sem-dados
+          path: windows/publicar/AtlasLinhas.exe
+          retention-days: 7
+          if-no-files-found: error

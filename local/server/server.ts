@@ -1,5 +1,5 @@
 import http from 'node:http';
-import {readFileSync,statSync} from 'node:fs';
+import {existsSync,readFileSync,statSync,unlinkSync} from 'node:fs';
 import {join,extname,resolve,sep} from 'node:path';
 import {projectRoot,dataDirectory,sqlite,assistantEnabled} from './environment';
 import {identityContext} from './identity';
@@ -70,4 +70,12 @@ const server=http.createServer(async(incoming,outgoing)=>{
 server.requestTimeout=30000;server.headersTimeout=15000;
 server.listen(port,'127.0.0.1',()=>{console.log(`Atlas Linhas disponível em http://localhost:${port}\nDados e backups: ${dataDirectory}\nAtlinhas: ${assistantEnabled?'ativo':'oculto'}\nPara encerrar, pressione Control+C.`)});
 server.on('error',e=>{console.error('Não foi possível iniciar:',e.message);process.exitCode=1;sqlite.close()});
-for(const signal of ['SIGINT','SIGTERM'] as const)process.on(signal,()=>server.close(()=>{sqlite.close();process.exit(0)}));
+let closing=false;
+function shutdown(){if(closing)return;closing=true;server.close(()=>{sqlite.close();process.exit(0)});setTimeout(()=>process.exit(1),5000).unref()}
+for(const signal of ['SIGINT','SIGTERM'] as const)process.on(signal,shutdown);
+const shutdownFile=process.env.ATLAS_SHUTDOWN_FILE;
+const parentPid=Number(process.env.ATLAS_PARENT_PID||0);
+if(shutdownFile||Number.isInteger(parentPid)&&parentPid>0)setInterval(()=>{
+ if(shutdownFile&&existsSync(shutdownFile)){try{unlinkSync(shutdownFile)}catch{}shutdown();return}
+ if(parentPid>0)try{process.kill(parentPid,0)}catch{shutdown()}
+},500).unref();
