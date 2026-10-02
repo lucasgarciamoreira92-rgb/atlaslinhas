@@ -5,7 +5,7 @@ import {join, resolve} from 'node:path';
 import {createServer} from 'node:net';
 
 // Always allocate a new database. Never accept an external URL or ATLAS_DATA_DIR.
-export async function isolatedServer(assistantStub = false) {
+export async function isolatedServer(assistantStub = false, assistantEnabled = assistantStub) {
   const directory = await mkdtemp(join(tmpdir(), 'atlas-e2e-'));
   const reservation = createServer();
   await new Promise<void>((yes, no) => { reservation.once('error', no); reservation.listen(0, '127.0.0.1', yes); });
@@ -25,7 +25,7 @@ export async function isolatedServer(assistantStub = false) {
   async function start() {
     child = spawn(process.execPath, [...(assistantStub?['--import',resolve('tests/e2e/support/openai-stub.mjs')]:[]),'local-dist/server.mjs'], {
       cwd: resolve('.'),
-      env: {...process.env, ATLAS_DATA_DIR: directory, ATLAS_PORT: String(port), OPENAI_API_KEY: assistantStub?'sk-ficticia-teste-sem-chamada-externa':'', ATLAS_OPENAI_MODEL: assistantStub?'modelo-ficticio':''},
+      env: {...process.env, ATLAS_DATA_DIR: directory, ATLAS_PORT: String(port), ATLAS_ASSISTANT_ENABLED:assistantEnabled?'1':'0', OPENAI_API_KEY: assistantStub?'sk-ficticia-teste-sem-chamada-externa':'', ATLAS_OPENAI_MODEL: assistantStub?'modelo-ficticio':''},
       stdio: ['ignore', 'pipe', 'pipe'],
     });
     await new Promise<void>((yes, no) => {

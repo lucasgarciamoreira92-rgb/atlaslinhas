@@ -15,7 +15,7 @@ export default function Assistant(){
  const [mode,setMode]=useState<Mode>('config');
  const [open,setOpen]=useState(false),[allowed,setAllowed]=useState(false),[configured,setConfigured]=useState(false),[configuredModel,setConfiguredModel]=useState(''),[resetSignal,setResetSignal]=useState(0);
  const rootRef=useRef<HTMLElement>(null),panelRef=useRef<HTMLElement>(null);
- useEffect(()=>{const c=new AbortController();fetch('/api/assistant',{signal:c.signal}).then(async r=>{if(!r.ok)return;const d=await r.json() as {configured:boolean;model:string};setAllowed(true);setConfigured(d.configured);setConfiguredModel(d.model);setMode(d.configured?'chat':'config');}).catch(()=>{});return()=>c.abort()},[]);
+ useEffect(()=>{const c=new AbortController();fetch('/api/assistant',{signal:c.signal}).then(async r=>{if(!r.ok)return;const d=await r.json() as {enabled:boolean;configured:boolean;model:string};if(!d.enabled)return;setAllowed(true);setConfigured(d.configured);setConfiguredModel(d.model);setMode(d.configured?'chat':'config');}).catch(()=>{});return()=>c.abort()},[]);
  useEffect(()=>{if(!open)return;const frame=requestAnimationFrame(()=>{const target=mode==='chat'?panelRef.current?.querySelector<HTMLTextAreaElement>('textarea'):panelRef.current?.querySelector<HTMLButtonElement>('.assistant-back, .assistant-close');target?.focus()});return()=>cancelAnimationFrame(frame)},[open,mode]);
  function close(){setOpen(false);requestAnimationFrame(()=>rootRef.current?.querySelector<HTMLButtonElement>('.assistant-launch')?.focus())}
  function openChat(){setMode(configured?'chat':'config')}

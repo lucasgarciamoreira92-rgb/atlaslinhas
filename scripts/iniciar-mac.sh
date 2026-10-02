@@ -12,6 +12,13 @@ if [ -z "${ATLAS_DATA_DIR:-}" ]; then
   export ATLAS_DATA_DIR="$HOME/AtlasLinhas/dados"
  fi
 fi
+if [ -z "${ATLAS_ASSISTANT_ENABLED:-}" ]; then
+ if [ -f "$ATLAS_DATA_DIR/atlinhas.enabled" ]; then
+  export ATLAS_ASSISTANT_ENABLED=1
+ else
+  export ATLAS_ASSISTANT_ENABLED=0
+ fi
+fi
 echo "Dados do Atlas: $ATLAS_DATA_DIR"
 if ! command -v node >/dev/null 2>&1; then
  echo 'Instale o Node.js 24 LTS e execute bash scripts/instalar-mac.sh.'

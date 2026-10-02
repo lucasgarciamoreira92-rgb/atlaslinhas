@@ -3,9 +3,10 @@ import {requireActor,AccessError} from '@/lib/access';
 import {sessionIdentity} from './auth';
 import {assistantConnectionStatus,requestAssistant,setAssistantConfiguration} from './openai-connection';
 import {readAssistantConfig} from './assistant-config';
+import {assistantEnabled} from './environment';
 setAssistantConfiguration(readAssistantConfig);
 const limits=new Map<string,{at:number;count:number;busy:boolean}>();
-export async function assistantGET(){await requireActor(true);return Response.json(assistantConnectionStatus());}
+export async function assistantGET(){await requireActor(true);return Response.json({enabled:assistantEnabled,...assistantConnectionStatus()});}
 export async function assistantTestPOST(req:Request){
  await requireActor(true);
  z.object({confirmed:z.literal(true)}).strict().parse(await req.json());

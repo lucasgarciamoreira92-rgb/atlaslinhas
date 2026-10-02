@@ -1,7 +1,7 @@
 import http from 'node:http';
 import {readFileSync,statSync} from 'node:fs';
 import {join,extname,resolve,sep} from 'node:path';
-import {projectRoot,dataDirectory,sqlite} from './environment';
+import {projectRoot,dataDirectory,sqlite,assistantEnabled} from './environment';
 import {identityContext} from './identity';
 import {authStatus,authAction,sessionIdentity,teamPost,errorResponse} from './auth';
 import {accessGET,accessPOST} from './access-service';
@@ -53,6 +53,7 @@ const server=http.createServer(async(incoming,outgoing)=>{
   else if(url.pathname.startsWith('/api/')){
    response=await identityContext.run(sessionIdentity(req),async()=>{
     try{if(url.pathname.startsWith('/api/auth/')&&method==='POST')return await authAction(url.pathname.slice(10),req);
+     if(url.pathname.startsWith('/api/assistant')&&!assistantEnabled&&!(url.pathname==='/api/assistant'&&method==='GET'))return Response.json({error:'Atlinhas está desativado.'},{status:404});
      const handler=routes[url.pathname]?.[method];if(!handler)return Response.json({error:'Rota ou método não encontrado.'},{status:404});return await handler(req);
     }catch(e){return errorResponse(e)}
    });
@@ -67,6 +68,6 @@ const server=http.createServer(async(incoming,outgoing)=>{
  }catch(e){console.error('[Atlas local]',e);if(!outgoing.headersSent)outgoing.writeHead(500,{'Content-Type':'application/json'});outgoing.end(JSON.stringify({error:'Falha na solicitação.'}))}
 });
 server.requestTimeout=30000;server.headersTimeout=15000;
-server.listen(port,'127.0.0.1',()=>{console.log(`Atlas Linhas disponível em http://localhost:${port}\nDados e backups: ${dataDirectory}\nPara encerrar, pressione Control+C.`)});
+server.listen(port,'127.0.0.1',()=>{console.log(`Atlas Linhas disponível em http://localhost:${port}\nDados e backups: ${dataDirectory}\nAtlinhas: ${assistantEnabled?'ativo':'oculto'}\nPara encerrar, pressione Control+C.`)});
 server.on('error',e=>{console.error('Não foi possível iniciar:',e.message);process.exitCode=1;sqlite.close()});
 for(const signal of ['SIGINT','SIGTERM'] as const)process.on(signal,()=>server.close(()=>{sqlite.close();process.exit(0)}));

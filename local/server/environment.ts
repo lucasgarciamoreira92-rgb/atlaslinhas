@@ -8,6 +8,7 @@ import {openDatabase} from './database';
 
 export const projectRoot=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 export const dataDirectory=resolve(process.env.ATLAS_DATA_DIR || join(homedir(),'AtlasLinhas','dados'));
+export const assistantEnabled=process.env.ATLAS_ASSISTANT_ENABLED==='1';
 export const {sqlite,db}=openDatabase(dataDirectory,projectRoot);
 const backupDirectory=join(dataDirectory,'backups');mkdirSync(backupDirectory,{recursive:true,mode:0o700});
 const keyPath=join(dataDirectory,'backup.key');

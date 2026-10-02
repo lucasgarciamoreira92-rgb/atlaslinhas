@@ -22,6 +22,8 @@ cd ~/Projetos/atlaslinhas
 bash scripts/iniciar-mac.sh
 ```
 
+O Atlinhas fica oculto por padrão. Cofre e Verificações continuam disponíveis normalmente. Para reativar o assistente no futuro, pare a aplicação, execute `bash scripts/ativar-atlinhas-mac.sh` e inicie novamente. Para ocultá-lo outra vez, use `bash scripts/desativar-atlinhas-mac.sh`. A configuração da OpenAI, o código e os cadastros são preservados.
+
 O caminho acima pressupõe que o repositório foi clonado na sua pasta pessoal. Também é possível abrir `Iniciar-Atlas-Linhas.command` na pasta do projeto. O terminal precisa continuar aberto; `Control+C` encerra o aplicativo. Manter o Mac desligado não perde os cadastros, mas interrompe o acesso.
 
 ## Primeiro acesso e validação

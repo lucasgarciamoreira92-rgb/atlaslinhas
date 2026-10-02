@@ -6,7 +6,7 @@ import {join} from 'node:path';
 import {once} from 'node:events';
 const directory=await mkdtemp(join(tmpdir(),'atlas-ai-config-')),base='http://127.0.0.1:14319';
 let child;
-async function start(){child=spawn(process.execPath,['local-dist/server.mjs'],{env:{...process.env,ATLAS_DATA_DIR:directory,ATLAS_PORT:'14319',OPENAI_API_KEY:'',ATLAS_OPENAI_MODEL:''},stdio:['ignore','pipe','pipe']});await new Promise((yes,no)=>{const timer=setTimeout(()=>no(Error('Servidor não iniciou')),10000);child.once('exit',()=>{clearTimeout(timer);no(Error('Servidor encerrou'));});child.stdout.on('data',d=>{if(String(d).includes('Atlas Linhas disponível')){clearTimeout(timer);yes();}});});}
+async function start(){child=spawn(process.execPath,['local-dist/server.mjs'],{env:{...process.env,ATLAS_DATA_DIR:directory,ATLAS_PORT:'14319',ATLAS_ASSISTANT_ENABLED:'1',OPENAI_API_KEY:'',ATLAS_OPENAI_MODEL:''},stdio:['ignore','pipe','pipe']});await new Promise((yes,no)=>{const timer=setTimeout(()=>no(Error('Servidor não iniciou')),10000);child.once('exit',()=>{clearTimeout(timer);no(Error('Servidor encerrou'));});child.stdout.on('data',d=>{if(String(d).includes('Atlas Linhas disponível')){clearTimeout(timer);yes();}});});}
 async function stop(){if(child?.exitCode===null){const end=once(child,'exit');child.kill();await end;}}
 async function req(path,status=200,body,cookie){const r=await fetch(base+path,{method:body?'POST':'GET',headers:{Origin:base,'Content-Type':'application/json',...(cookie?{Cookie:cookie}:{})},...(body?{body:JSON.stringify(body)}:{})});assert.equal(r.status,status,path);const text=await r.text();return {text,data:JSON.parse(text),cookie:r.headers.get('set-cookie')?.split(';')[0]};}
 const fakeKey='sk-ficticia-nao-e-uma-chave-real',password='01234567';

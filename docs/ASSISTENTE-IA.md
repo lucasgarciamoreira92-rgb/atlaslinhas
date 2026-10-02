@@ -1,5 +1,9 @@
 # Assistente Atlas — integração em construção
 
+## Disponibilidade reversível — 02/10/2026
+
+O Atlinhas fica oculto por padrão na instalação de uso diário. Enquanto estiver oculto, mascote, painel e rotas de IA não ficam disponíveis; Cofre e Verificações e autenticações permanecem nos menus principais. Código, configuração privada e dados são preservados. `scripts/ativar-atlinhas-mac.sh` cria a chave local de ativação e `scripts/desativar-atlinhas-mac.sh` a remove; é necessário reiniciar a aplicação depois da mudança.
+
 ## Etapa 7 — Cofre protegido no assistente (14/09/2026)
 
 Implementado na main em `7f1459ff48b8c8226b154bbc95214b83128a21ec`. O modo **Cofre protegido** permite buscar/selecionar uma conta já aprovada e cadastrar/alterar senha e códigos de recuperação após desbloqueio. Usa o mesmo componente e serviço do Cofre, com escopo próprio `assistant`. A gravação ocorre somente ao clicar em **Salvar credencial**; campos vazios preservam o valor existente. O piloto do assistente continua administrativo.

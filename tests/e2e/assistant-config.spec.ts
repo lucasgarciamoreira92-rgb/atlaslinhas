@@ -1,5 +1,6 @@
 import {test,expect} from './support/fixtures';
 import {setup,admin} from './support/ui';
+test.use({assistantEnabled:true});
 
 test('assistente: campos visíveis e separados em desktop e celular',async({page},info)=>{
  await setup(page);
