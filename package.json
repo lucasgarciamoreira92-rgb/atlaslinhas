@@ -15,6 +15,7 @@
     "local:build": "node scripts/build-local.mjs",
     "local:start": "node local-dist/server.mjs",
     "local:test": "node scripts/test-local.mjs",
+    "windows:private": "node scripts/preparar-windows-com-dados.mjs",
     "local:reset-password": "node scripts/reset-local-password.mjs",
     "sites:build": "node scripts/run-framework.mjs build",
     "sites:start": "node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js dev --config dist/server/wrangler.json --local --persist-to .wrangler/state --ip 127.0.0.1 --inspector-port 0",
