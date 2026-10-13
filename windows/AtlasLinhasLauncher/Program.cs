@@ -29,6 +29,13 @@ internal static class Program
         try
         {
             var root = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "AtlasLinhas");
+            var installed = EnsureInstalled(root);
+            if (!Path.GetFullPath(Environment.ProcessPath!).Equals(installed, StringComparison.OrdinalIgnoreCase))
+            {
+                mutex.ReleaseMutex();
+                Process.Start(new ProcessStartInfo(installed) { UseShellExecute = true });
+                return;
+            }
             var runtime = Path.Combine(root, "runtime", AppVersion);
             var data = Path.Combine(root, "dados");
             EnsureRuntime(runtime);
@@ -40,6 +47,45 @@ internal static class Program
         {
             MessageBox.Show(error.Message, "Atlas Linhas", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
+    }
+
+    private static string EnsureInstalled(string root)
+    {
+        var current = Path.GetFullPath(Environment.ProcessPath ?? throw new InvalidOperationException("Não foi possível localizar o executável."));
+        var installed = Path.Combine(root, "AtlasLinhas.exe");
+        if (current.Equals(Path.GetFullPath(installed), StringComparison.OrdinalIgnoreCase)) return installed;
+        Directory.CreateDirectory(root);
+        var temporary = installed + "." + Guid.NewGuid().ToString("N") + ".tmp";
+        try
+        {
+            File.Copy(current, temporary, true);
+            File.Move(temporary, installed, true);
+            CreateShortcut(installed, Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.Programs),
+                "Atlas Linhas", "Atlas Linhas.lnk"));
+            CreateShortcut(installed, Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
+                "Atlas Linhas.lnk"));
+            return installed;
+        }
+        catch
+        {
+            try { File.Delete(temporary); } catch { }
+            throw new InvalidOperationException("Não foi possível instalar o Atlas Linhas neste usuário do Windows. Feche uma versão anterior e tente novamente.");
+        }
+    }
+
+    private static void CreateShortcut(string executable, string shortcutPath)
+    {
+        Directory.CreateDirectory(Path.GetDirectoryName(shortcutPath)!);
+        var shellType = Type.GetTypeFromProgID("WScript.Shell") ?? throw new InvalidOperationException("O Windows não disponibilizou o criador de atalhos.");
+        var shell = Activator.CreateInstance(shellType)!;
+        var shortcut = shellType.InvokeMember("CreateShortcut", BindingFlags.InvokeMethod, null, shell, [shortcutPath])!;
+        var type = shortcut.GetType();
+        type.InvokeMember("TargetPath", BindingFlags.SetProperty, null, shortcut, [executable]);
+        type.InvokeMember("WorkingDirectory", BindingFlags.SetProperty, null, shortcut, [Path.GetDirectoryName(executable)!]);
+        type.InvokeMember("Description", BindingFlags.SetProperty, null, shortcut, ["Atlas Linhas"]);
+        type.InvokeMember("Save", BindingFlags.InvokeMethod, null, shortcut, null);
     }
 
     private static void EnsureRuntime(string runtime)

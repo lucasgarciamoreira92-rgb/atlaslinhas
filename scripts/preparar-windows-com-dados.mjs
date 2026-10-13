@@ -10,7 +10,7 @@ export const seedMarker=Buffer.alloc(32);
 seedMarker.write('ATLAS_LINHAS_SEED_V1','ascii');
 const associatedData=Buffer.from('AtlasLinhas-Windows-v1');
 
-function usage(){console.error('Uso: node scripts/preparar-windows-com-dados.mjs <AtlasLinhas-generico.exe> <pasta-dados> <AtlasLinhas-com-dados.exe>');process.exit(2)}
+function usage(){console.error('Uso: node scripts/preparar-windows-com-dados.mjs <AtlasLinhas-base.exe> <pasta-dados> <AtlasLinhas-Setup-Privado.exe>');process.exit(2)}
 function safeFile(path){if(!existsSync(path))return false;const s=statSync(path);return s.isFile()&&!s.isSymbolicLink()}
 function walk(root,current=root,result=[]){for(const name of readdirSync(current)){const path=join(current,name),rel=relative(root,path).split(sep).join('/');if(rel==='atlas-linhas.sqlite'||rel.startsWith('atlas-linhas.sqlite-')||rel==='openai-config.json'||rel==='atlinhas.enabled'||rel.startsWith('checkpoints/'))continue;const s=statSync(path);if(s.isDirectory())walk(root,path,result);else if(s.isFile())result.push({path:rel,data:readFileSync(path).toString('base64')})}return result}
 export function encrypt(clear,password){const salt=randomBytes(16),nonce=randomBytes(12),key=pbkdf2Sync(password,salt,600_000,32,'sha256'),cipher=createCipheriv('aes-256-gcm',key,nonce);cipher.setAAD(associatedData);const ciphertext=Buffer.concat([cipher.update(clear),cipher.final()]),tag=cipher.getAuthTag();key.fill(0);return Buffer.from(JSON.stringify({version:1,salt:salt.toString('base64'),nonce:nonce.toString('base64'),tag:tag.toString('base64'),ciphertext:ciphertext.toString('base64')}))}
@@ -30,7 +30,7 @@ export async function prepare(genericExe,dataDirectory,outputExe,password){
   for(const required of ['backup.key','vault.key'])if(existsSync(join(dataDirectory,required))&&!files.some(file=>file.path===required))files.push({path:required,data:readFileSync(join(dataDirectory,required)).toString('base64')});
   const clear=Buffer.from(JSON.stringify({version:1,files}));const envelope=encrypt(clear,password);clear.fill(0);
   mkdirSync(dirname(outputExe),{recursive:true});appendSeed(genericExe,outputExe,envelope);
-  console.log(`Executável privado criado: ${outputExe}\nBanco e chaves foram criptografados. Não envie este arquivo ao GitHub.`);
+  console.log(`Instalador privado criado: ${outputExe}\nO banco atual será a base inicial do Windows. Banco e chaves foram criptografados; não envie este arquivo ao GitHub.`);
  }finally{rmSync(temporary,{recursive:true,force:true})}
 }
 
